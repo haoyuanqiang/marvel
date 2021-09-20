@@ -1,0 +1,36 @@
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/
+
+info:
+  name: marvel-gateway
+  organization: org.marvel
+  build:
+    version: 1.0.0
+
+server:
+  port: 8003
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: marvel-auth
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+feign:
+  hystrix:
+    enabled: false
+

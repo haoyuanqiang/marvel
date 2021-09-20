@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--基本信息-->
+  <groupId>org.marvel</groupId>
+  <artifactId>marvel</artifactId>
+  <version>1.0.0</version>
+  <description>
+    一个基于Spring Cloud的基础微服务开发框架，有高效率，低封装的特点，非常适合学习和中小企业直接作为开发框架使用。
+  </description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>marvel-common</module>
+    <module>marvel-discovery</module>
+    <module>marvel-auth</module>
+    <module>marvel-gateway</module>
+    <module>marvel-admin</module>
+  </modules>
+
+  <!--属性-->
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <!-- 文件拷贝时的编码 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- 编译时的编码 -->
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    <!-- Lombok -->
+    <lombok.version>1.18.18</lombok.version>
+    <!-- 工具包 -->
+    <hutool.version>5.6.3</hutool.version>
+    <fastjson.version>1.2.71</fastjson.version>
+    <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
+    <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+  </properties>
+
+  <!--依赖-->
+  <dependencies>
+
+  </dependencies>
+
+  <!--依赖-->
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!--Lombok-->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+      </dependency>
+      <!-- HuTool -->
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <!-- fastjson -->
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>${fastjson.version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <!--构建-->
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

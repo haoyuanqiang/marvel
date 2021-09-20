@@ -1,0 +1,67 @@
+@import '~antd/lib/style/themes/default.less';
+
+.marvel-layout {
+  background-color: rgb(238, 238, 245);
+  height: 100%;
+  min-height: 600px;
+  min-width: 800px;
+
+  :global {
+    .ant-layout-sider {
+      background-color: #F2F6FC;
+    }
+
+    .ant-layout-content {
+      background-color: white;
+      padding: 8px 16px;
+      overflow: auto;
+    }
+
+    .ant-tree {
+      background-color: transparent;
+    }
+  }
+}
+
+/* Sider */
+.marvel-sider-title {
+  height: 24px;
+  line-height: 24px;
+  padding: 0 16px;
+}
+
+.marvel-sider-toolbox {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 16px;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.marvel-sider-children {
+  background-color: white;
+  height: calc(100% - 68px);
+  margin: 0 4px 4px;
+  overflow: auto;
+  padding: 4px;
+}
+
+.marvel-authority-list {
+  
+}
+
+.marvel-empty-status {
+  display: inline-block;
+  left: 55%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.marvel-tree {
+  :global {
+    .ant-tree-treenode {
+      white-space: nowrap;
+    }
+  }
+}

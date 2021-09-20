@@ -1,0 +1,74 @@
+@import '~antd/es/style/themes/default.less';
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: "Microsoft Yahei", "微软雅黑", "Helvetica Neue", "Helvetica", 'PingFangSC', "PingFang SC", 'NotoSansHans', 'Hiragino Sans GB', "Lantinghei SC", "STXihei", "WenQuanYi Micro Hei", Arial, sans-serif;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1px;
+  background: #d3d3d3;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 1px;
+  background: #eaeaea;
+}
+
+::-webkit-scrollbar-corner {
+  background: #eaeaea;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}
