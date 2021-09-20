@@ -135,16 +135,16 @@ marvel
 
 ## 截图
 
-![登录页面](README.assets/登录页面.jpeg)
+![登录页面](README.assets/登录页面.png)
 
-![首页](README.assets/首页.jpeg)
+![首页](README.assets/首页.png)
 
-![菜单管理](README.assets/菜单管理.jpeg)
+![菜单管理](README.assets/菜单管理.png)
 
-![部门管理](README.assets/部门管理.jpeg)
+![部门管理](README.assets/部门管理.png)
 
-![岗位管理](README.assets/岗位管理.jpeg)
+![岗位管理](README.assets/岗位管理.png)
 
-![用户管理](README.assets/用户管理.jpeg)
+![用户管理](README.assets/用户管理.png)
 
-![个人中心](README.assets/个人中心.jpeg)
+![个人中心](README.assets/个人中心.png)
