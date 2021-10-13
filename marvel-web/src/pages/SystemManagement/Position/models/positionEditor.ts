@@ -8,7 +8,7 @@ export type PositionEditorModelState = {
   type: 'create' | 'update';
   timestamp: number;
   visible: boolean;
-}
+};
 
 export type DeaprtmentEditorModelType = {
   namespace: 'positionEditor';
@@ -19,7 +19,7 @@ export type DeaprtmentEditorModelType = {
   reducers: {
     save: Reducer<PositionEditorModelState>;
   };
-}
+};
 
 const PositionEditorModel: DeaprtmentEditorModelType = {
   namespace: 'positionEditor',
@@ -27,13 +27,13 @@ const PositionEditorModel: DeaprtmentEditorModelType = {
     entity: {},
     type: 'create',
     timestamp: 0,
-    visible: false
+    visible: false,
   },
   effects: {
     *create({ callback, payload }, { call, put }) {
       const response: HttpResponse<string> = yield call(createPosition, payload);
       if (_.isObject(response) && response.code === 0) {
-        yield put ({
+        yield put({
           type: 'positions/fetch',
         });
       }
@@ -44,14 +44,14 @@ const PositionEditorModel: DeaprtmentEditorModelType = {
     *update({ payload, callback }, { call, put }) {
       const response: HttpResponse<string> = yield call(updatePosition, payload);
       if (_.isObject(response) && response.code === 0) {
-        yield put ({
+        yield put({
           type: 'positions/fetch',
         });
       }
       if (_.isFunction(callback)) {
         callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): PositionEditorModelState {
@@ -59,12 +59,12 @@ const PositionEditorModel: DeaprtmentEditorModelType = {
         return {
           ...state,
           ...payload,
-          timestamp: Date.now()
-        }
+          timestamp: Date.now(),
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default PositionEditorModel;

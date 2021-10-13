@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Dispatch } from 'umi';
 import { connect } from 'umi';
-import { Descriptions, Typography, Form, Row, Col, Input, Button, Space, Avatar, Tag } from 'antd';
-import { CloseOutlined, EditOutlined, SaveOutlined, QuestionOutlined } from '@ant-design/icons';
+import { Descriptions, Typography, Space, Avatar, Tag } from 'antd';
+import { QuestionOutlined } from '@ant-design/icons';
 import * as AntdIcons from '@ant-design/icons';
 import type { MenuItem } from '../models/menus';
 
@@ -35,7 +35,7 @@ function renderIcon(icon: string): React.ReactNode {
 class MenuItemInfo extends React.PureComponent<MenuItemInfoProps, MenuItemInfoState> {
   state: MenuItemInfoState = {
     readonly: true,
-  }
+  };
 
   static getDerivedStateFromProps(nextProps: MenuGroupProps, prevState: MenuGroupState) {
     const nextState: MenuGroupState = {};
@@ -53,74 +53,81 @@ class MenuItemInfo extends React.PureComponent<MenuItemInfoProps, MenuItemInfoSt
 
   enableEdit = (): void => {
     this.setState({ readonly: false });
-  }
+  };
 
   onChange = (changedValues) => {
     const { value } = this.state;
     const nextValue = _.cloneDeep(_.merge(value, changedValues));
     this.setState({ value: nextValue });
-  }
+  };
 
   onSave = () => {
     const { value } = this.state;
     const payload = _.pick(value, [
-      'id', 'code', 'name', 'icon', 'parentId', 'sortNumber', 'type', 'path'
+      'id',
+      'code',
+      'name',
+      'icon',
+      'parentId',
+      'sortNumber',
+      'type',
+      'path',
     ]);
     const { dispatch } = this.props;
     dispatch({
       type: 'menuManagement/modifyMenu',
-      payload
+      payload,
     });
-    this.setState({ readonly: true })
-  }
+    this.setState({ readonly: true });
+  };
 
   onCancel = () => {
     const { defaultValue } = this.state;
     this.setState({ readonly: true, value: defaultValue });
-  }
+  };
 
   renderMenuType = (value) => {
     if (value === 1) {
-      return <Tag color="magenta">目录</Tag>
+      return <Tag color="magenta">目录</Tag>;
     }
     if (value === 2) {
-      return <Tag color="gold">页面</Tag>
+      return <Tag color="gold">页面</Tag>;
     }
     return null;
-  }
+  };
 
   renderMenuVisible = (value) => {
     if (value === 1) {
-      return <Tag color="geekblue">显示</Tag>
+      return <Tag color="geekblue">显示</Tag>;
     }
     if (value === 2) {
-      return <Tag color="orange">隐藏</Tag>
+      return <Tag color="orange">隐藏</Tag>;
     }
     return null;
-  }
+  };
 
   renderMenuStatus = (value) => {
     if (value === 1) {
-      return <Tag color="geekblue">正常</Tag>
+      return <Tag color="geekblue">正常</Tag>;
     }
     if (value === 2) {
-      return <Tag color="orange">停用</Tag>
+      return <Tag color="orange">停用</Tag>;
     }
     return null;
-  }
+  };
 
   renderRouteType = (value) => {
     if (value === 1) {
-      return <Tag color="geekblue">系统</Tag>
+      return <Tag color="geekblue">系统</Tag>;
     }
     if (value === 2) {
-      return <Tag color="orange">模块</Tag>
+      return <Tag color="orange">模块</Tag>;
     }
     if (value === 3) {
-      return <Tag color="volcano">外链</Tag>
+      return <Tag color="volcano">外链</Tag>;
     }
     return null;
-  }
+  };
 
   render(): React.ReactNode {
     const { value } = this.state;
@@ -133,23 +140,25 @@ class MenuItemInfo extends React.PureComponent<MenuItemInfoProps, MenuItemInfoSt
         </div>
         <div style={{ border: '1px solid #ccc', padding: '8px' }}>
           <div style={{ verticalAlign: 'middle' }}>
-            <div 
-              style={{ 
-                display: 'inline-block', 
+            <div
+              style={{
+                display: 'inline-block',
                 height: 80,
                 lineHeight: '72px',
-                textAlign: 'center', 
+                textAlign: 'center',
                 verticalAlign: 'middle',
-                width: 120 
+                width: 120,
               }}
             >
-              <Avatar 
-                icon={renderIcon(value.iconName)} 
+              <Avatar
+                icon={renderIcon(value.iconName)}
                 size={64}
                 style={{ backgroundColor: '#87d068' }}
               />
             </div>
-            <div style={{ display: 'inline-block', verticalAlign: 'top', width: 'calc(100% - 120px)' }}>
+            <div
+              style={{ display: 'inline-block', verticalAlign: 'top', width: 'calc(100% - 120px)' }}
+            >
               <Descriptions size="small">
                 <Descriptions.Item label={<Text strong>菜单编码</Text>}>
                   {_.get(value, 'code', '')}

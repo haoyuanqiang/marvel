@@ -9,7 +9,7 @@ export type LoginUserModelState = {
   loginName?: string;
   nickname?: string;
   sex?: string;
-}
+};
 
 export type LoginUserModelType = {
   namespace: 'loginUser';
@@ -20,7 +20,7 @@ export type LoginUserModelType = {
   reducers: {
     save: Reducer<LoginUserModelState>;
   };
-}
+};
 
 const loginUserModel: LoginUserModelType = {
   namespace: 'loginUser',
@@ -32,23 +32,23 @@ const loginUserModel: LoginUserModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         user = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { ...user }
-      })
-    }
+        payload: { ...user },
+      });
+    },
   },
   reducers: {
     save(state, { payload }): LoginUserModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default loginUserModel;

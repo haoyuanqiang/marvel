@@ -3,12 +3,15 @@ import type { MouseEvent, KeyboardEvent } from 'react';
 import type { ConnectProps, Dispatch } from 'umi';
 import { connect } from 'umi';
 import { Tabs } from 'antd';
-import _, { isString } from 'lodash';
+import { isString } from 'lodash';
 import type { ConnectState, IframeTabPane } from '@/models/connect';
 import styles from './style.less';
 
 const { TabPane } = Tabs;
-declare type onTabsEdit = (e: MouseEvent | KeyboardEvent | string, action: 'add' | 'remove') => void;
+declare type onTabsEdit = (
+  e: MouseEvent | KeyboardEvent | string,
+  action: 'add' | 'remove',
+) => void;
 
 interface TabLayoutProps extends ConnectProps {
   activeTabPane: string;
@@ -17,29 +20,29 @@ interface TabLayoutProps extends ConnectProps {
 }
 
 interface TabLayoutState {
-  tabAnimated?: { inkBar: boolean, tabPane: boolean }
+  tabAnimated?: { inkBar: boolean; tabPane: boolean };
 }
 
 class TabLayout extends React.PureComponent<TabLayoutProps, TabLayoutState> {
-  state: TabLayoutState = {}
+  state: TabLayoutState = {};
 
   onTabEdit: onTabsEdit = (e: MouseEvent | KeyboardEvent | string, action: 'add' | 'remove') => {
     if (isString(e) && action === 'remove') {
       const { dispatch } = this.props;
       dispatch({
         type: 'openedTabs/remove',
-        payload: { key: e }
+        payload: { key: e },
       });
     }
-  }
+  };
 
   onTabChange = (activeKey: string) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'openedTabs/active',
-      payload: { key: activeKey }
-    })
-  }
+      payload: { key: activeKey },
+    });
+  };
 
   combineIframeUrl = (srcPath: string) => {
     if (typeof srcPath === 'string') {
@@ -49,7 +52,7 @@ class TabLayout extends React.PureComponent<TabLayoutProps, TabLayoutState> {
       return `${window.location.origin}${srcPath}`;
     }
     return null;
-  }
+  };
 
   render(): React.ReactNode {
     const { tabAnimated } = this.state;
@@ -66,10 +69,10 @@ class TabLayout extends React.PureComponent<TabLayoutProps, TabLayoutState> {
         onChange={this.onTabChange}
         onEdit={this.onTabEdit}
       >
-        {tabPanes.map(tabPane => (
+        {tabPanes.map((tabPane) => (
           <TabPane
             closable={tabPane.key !== 'HOME'}
-            key={tabPane.key} 
+            key={tabPane.key}
             style={{ backgroundColor: 'white', height: '100%' }}
             tab={tabPane.name}
           >
@@ -80,11 +83,11 @@ class TabLayout extends React.PureComponent<TabLayoutProps, TabLayoutState> {
           </TabPane>
         ))}
       </Tabs>
-    )
+    );
   }
 }
 
 export default connect(({ openedTabs }: ConnectState) => ({
   tabPanes: openedTabs.tabPanes,
-  activeTabPane: openedTabs.activeTabPane
+  activeTabPane: openedTabs.activeTabPane,
 }))(TabLayout);

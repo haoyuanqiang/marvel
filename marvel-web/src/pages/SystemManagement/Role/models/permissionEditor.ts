@@ -1,6 +1,11 @@
 import type { Reducer, Effect } from 'umi';
 import type { HttpResponse, Menu, Permission, RolePermissions } from '../services/apiType';
-import { getMenus, getPermissions, getRolePermissions, saveRolePermissions } from '../services/services';
+import {
+  getMenus,
+  getPermissions,
+  getRolePermissions,
+  saveRolePermissions,
+} from '../services/services';
 
 export type RolePermissionModelState = {
   menus: Menu[];
@@ -8,7 +13,7 @@ export type RolePermissionModelState = {
   data?: RolePermissions;
   timestamp: number;
   visible?: boolean;
-}
+};
 
 export type RolePermissionModelType = {
   namespace: 'rolePermission';
@@ -23,42 +28,42 @@ export type RolePermissionModelType = {
   reducers: {
     save: Reducer<RolePermissionModelState>;
   };
-}
+};
 
 function formatMenus(menus: Menu[], permissions: Permission[]): Menu[] {
   if (!_.isArray(menus)) {
-    return []
+    return [];
   }
-  return _.map<Menu, Menu>(menus, item => {
+  return _.map<Menu, Menu>(menus, (item) => {
     const result = {
       ..._.omit(item, ['icon']),
       key: item.id,
       title: item.name,
       isLeaf: item.type !== 1,
-      iconName: item.type !== 1 ? 'FileOutlined' : 'FolderOpenOutlined'
-    }
+      iconName: item.type !== 1 ? 'FileOutlined' : 'FolderOpenOutlined',
+    };
     if (item.type !== 1 && _.isArray(permissions)) {
-      result.children = permissions.filter(v => v.menuId === item.id);
+      result.children = permissions.filter((v) => v.menuId === item.id);
       if (!_.isEmpty(result.children)) {
         result.isLeaf = false;
       }
     }
     return result;
-  })
+  });
 }
 
 function formatPermissions(permissions: Permission[]): Permission[] {
   if (!_.isArray(permissions)) {
-    return []
+    return [];
   }
-  return _.map<Permission, Permission>(permissions, item => ({
+  return _.map<Permission, Permission>(permissions, (item) => ({
     ...item,
     key: item.id,
     title: item.name,
     isLeaf: true,
     isPermission: true,
-    iconName: 'KeyOutlined'
-  }))
+    iconName: 'KeyOutlined',
+  }));
 }
 
 function convertToTree(menus: Menu[]): Menu[] {
@@ -67,10 +72,10 @@ function convertToTree(menus: Menu[]): Menu[] {
   }
   const tmpMap = new Map<string, Menu>();
   const result: Menu[] = [];
-  _.forEach<Menu>(menus, menu => {
+  _.forEach<Menu>(menus, (menu) => {
     tmpMap.set(menu.id, menu);
   });
-  _.forEach<Menu>(menus, menu => {
+  _.forEach<Menu>(menus, (menu) => {
     const node = tmpMap.get(menu.parentId);
     if (node && menu.id !== menu.parentId) {
       if (!_.isArray(node.children)) {
@@ -91,7 +96,7 @@ const RolePermissionModel: RolePermissionModelType = {
     // permissions: [],
     data: null,
     timestamp: 0,
-    visible: false
+    visible: false,
   },
   effects: {
     *fetchMenusAndPermissions(__, { call, put }) {
@@ -105,32 +110,32 @@ const RolePermissionModel: RolePermissionModelType = {
       if (_.isObject(response2) && response2.code === 0 && _.isArray(response2.result)) {
         permissions = formatPermissions(response2.result);
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { menus: convertToTree(formatMenus(menus, permissions)) }
-      })
+        payload: { menus: convertToTree(formatMenus(menus, permissions)) },
+      });
     },
     *fetchData({ payload }, { call, put }) {
-      yield put ({ type: 'fetchMenusAndPermissions' });
+      yield put({ type: 'fetchMenusAndPermissions' });
       const response: HttpResponse<RolePermissions> = yield call(getRolePermissions, payload);
       let data = null;
       if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
         data = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { data, visible: true }
+        payload: { data, visible: true },
       });
     },
     *submit({ payload }, { call, put }) {
       const response: HttpResponse<string> = yield call(saveRolePermissions, payload);
       if (_.isObject(response) && response.code === 0) {
-        yield put ({
+        yield put({
           type: 'save',
-          payload: { visible: false }
+          payload: { visible: false },
         });
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): RolePermissionModelState {
@@ -138,12 +143,12 @@ const RolePermissionModel: RolePermissionModelType = {
         return {
           ...state,
           ...payload,
-          timestamp: Date.now()
-        }
+          timestamp: Date.now(),
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default RolePermissionModel;

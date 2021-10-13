@@ -7,7 +7,6 @@ import { CodeSandboxOutlined } from '@ant-design/icons';
 import IconSelect from '@/components/IconSelect';
 import type { ConnectState, Menu } from '../models/connect';
 
-
 type MenuEditorProps = {
   dispatch: Dispatch;
   loading: boolean;
@@ -16,30 +15,32 @@ type MenuEditorProps = {
   tree: Menu[];
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 type MenuEditorState = {
   formFields: any;
   timestamp: number;
   menuType: number;
-}
+};
 
 function ignoreSelf(menus: Menu[], menuId: string): Menu[] {
   if (!_.isArray(menus)) {
-    return []
+    return [];
   }
-  return menus.map(value => {
-    if (value.id === menuId) {
-      return null;
-    }
-    if (_.isArray(value.children) && !_.isEmpty(value.children)) {
-      return {
-        ...value,
-        children: ignoreSelf(value.children, menuId)
+  return menus
+    .map((value) => {
+      if (value.id === menuId) {
+        return null;
       }
-    }
-    return value;
-  }).filter(v => !!v);
+      if (_.isArray(value.children) && !_.isEmpty(value.children)) {
+        return {
+          ...value,
+          children: ignoreSelf(value.children, menuId),
+        };
+      }
+      return value;
+    })
+    .filter((v) => !!v);
 }
 
 class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
@@ -47,8 +48,8 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
 
   state: MenuEditorState = {
     formFields: {},
-    timestamp: 0
-  }
+    timestamp: 0,
+  };
 
   static getDerivedStateFromProps(nextProps: MenuEditorProps, prevState: MenuEditorState) {
     const { entity, timestamp } = nextProps;
@@ -72,8 +73,8 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
       return {
         formFields: entity,
         menuType: entity.type,
-        timestamp
-      }
+        timestamp,
+      };
     }
     return null;
   }
@@ -81,10 +82,10 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `ME_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `ME_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -101,29 +102,29 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
           if (code === 0) {
             this.onCancel();
           }
-        }
-      })
+        },
+      });
     }
-  }
-  
+  };
+
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'menuEditor/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'menuEditor/save', payload: { visible: false } });
+  };
 
   onFieldsChange = (changedFields: any) => {
     if (_.isArray(changedFields)) {
       const nextState = {};
-      changedFields.forEach(item => {
+      changedFields.forEach((item) => {
         if (_.isArray(item.name) && item.name.indexOf('type') >= 0) {
           nextState.menuType = item.value;
         }
-      })
+      });
       if (Object.keys(nextState).length > 0) {
         this.setState(nextState);
       }
     }
-  }
+  };
 
   renderPageForm = () => {
     return (
@@ -159,8 +160,8 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
           </Col>
         </Row>
       </>
-    )
-  }
+    );
+  };
 
   render() {
     const { tree, type, visible } = this.props;
@@ -174,7 +175,7 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
         bodyStyle={{ minHeight: 300 }}
         destroyOnClose
         maskClosable={false}
-        title={`${type === 'create' ? '新建' : '修改'}菜单`} 
+        title={`${type === 'create' ? '新建' : '修改'}菜单`}
         visible={visible}
         width={600}
         onCancel={this.onCancel}
@@ -191,20 +192,12 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
         >
           <Row>
             <Col span={24}>
-              <Form.Item
-                label="上级菜单"
-                name="parentId"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="上级菜单" name="parentId" rules={[{ required: true }]}>
                 <TreeSelect allowClear treeData={treeData} treeDefaultExpandedKeys={['root']} />
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item
-                label="菜单类型"
-                name="type"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="菜单类型" name="type" rules={[{ required: true }]}>
                 <Radio.Group style={{ width: '100%' }} disabled={type === 'update'}>
                   <Radio value={1}>目录</Radio>
                   <Radio value={2}>页面</Radio>
@@ -255,10 +248,9 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
                 name="sortNumber"
                 rules={[{ required: true }, { type: 'integer' }]}
               >
-                <InputNumber style={{ width: '100%' }}  />
+                <InputNumber style={{ width: '100%' }} />
               </Form.Item>
             </Col>
-           
           </Row>
           <Row gutter={8}>
             <Col span={12}>
@@ -293,7 +285,7 @@ class MenuEditor extends React.PureComponent<MenuEditorProps, MenuEditorState> {
           {menuType === 2 && this.renderPageForm()}
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -303,5 +295,5 @@ export default connect(({ menuManagement, menuEditor, loading }: ConnectState) =
   tree: menuManagement.list,
   timestamp: menuEditor.timestamp,
   type: menuEditor.type,
-  visible: menuEditor.visible
+  visible: menuEditor.visible,
 }))(MenuEditor);

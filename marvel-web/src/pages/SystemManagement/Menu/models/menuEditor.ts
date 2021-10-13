@@ -8,8 +8,7 @@ export type MenuEditorModelState = {
   timestamp: number;
   type: 'create' | 'update';
   visible: boolean;
-}
-
+};
 
 export type MenuEditorModelType = {
   namespace: 'menuEditor';
@@ -20,7 +19,7 @@ export type MenuEditorModelType = {
   reducers: {
     save: Reducer<MenuEditorModelState>;
   };
-}
+};
 
 const MenuEditor: MenuEditorModelType = {
   namespace: 'menuEditor',
@@ -28,27 +27,27 @@ const MenuEditor: MenuEditorModelType = {
     menu: null,
     timestamp: 0,
     type: 'create',
-    visible: false
+    visible: false,
   },
   effects: {
     *initialize({ payload }, { call, put, select }) {
       const { isCreate } = payload;
       if (isCreate) {
-        const state = yield select(states => states.menuManagement);
+        const state = yield select((states) => states.menuManagement);
         const { selectedKeys } = state;
         yield put({
           type: 'save',
           payload: {
             menu: {
-              parentId: _.isArray(selectedKeys) ? selectedKeys[0] : undefined
+              parentId: _.isArray(selectedKeys) ? selectedKeys[0] : undefined,
             },
             timestamp: Date.now(),
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
-        const state = yield select(states => states.menuManagement);
+        const state = yield select((states) => states.menuManagement);
         const { selectedKeys } = state;
         if (_.isArray(selectedKeys) && !_.isEmpty(selectedKeys)) {
           const response: HttpResponse<Menu> = yield call(getMenu, selectedKeys[0]);
@@ -59,37 +58,40 @@ const MenuEditor: MenuEditorModelType = {
                 menu: response.result,
                 timestamp: Date.now(),
                 type: 'update',
-                visible: true
-              }
-            })
+                visible: true,
+              },
+            });
           }
         }
       }
     },
     *submit({ payload }, { call, put, select }) {
-      const state = yield select(states => states.menuEditor);
+      const state = yield select((states) => states.menuEditor);
       const { type } = state;
-      const response: HttpResponse<string> = yield call(type === 'create' ? createMenu : updateMenu, payload);
+      const response: HttpResponse<string> = yield call(
+        type === 'create' ? createMenu : updateMenu,
+        payload,
+      );
       if (_.isObject(response) && response.code === 0) {
-        yield put({ type: 'save', payload: { visible: false }});
+        yield put({ type: 'save', payload: { visible: false } });
         yield put({ type: 'menuManagement/fetch' });
         if (window.parent) {
           window.parent.postMessage({ key: 'refreshMenus' });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): MenusModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default MenuEditor;

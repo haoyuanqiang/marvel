@@ -25,7 +25,7 @@ export async function getMenus(): Promise<any> {
 export async function checkPageAuthorization(path: string) {
   return request.post(`${serverUrl}/marvel-admin/authorization/menu`, {
     data: {
-      menu: path
-    }
+      menu: path,
+    },
   });
-} 
+}

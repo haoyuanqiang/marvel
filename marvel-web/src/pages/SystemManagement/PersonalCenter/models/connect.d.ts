@@ -1,8 +1,6 @@
 import type { UserModelState } from './user';
 
-export {
-  UserModelState
-};
+export { UserModelState };
 
 export interface Loading {
   global: boolean;

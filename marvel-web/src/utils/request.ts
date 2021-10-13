@@ -71,8 +71,8 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   headers: {
-    'Access-Control-Allow-Origin': '*'
-  }
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 request.interceptors.request.use((url, options) => {
@@ -82,7 +82,7 @@ request.interceptors.request.use((url, options) => {
     headers.Token = authority;
   }
   if (options.method === 'GET' || options.method === 'get') {
-    _.set(options, 'params', { ...(options.params), ts: Date.now() });
+    _.set(options, 'params', { ...options.params, ts: Date.now() });
   }
   return {
     url,
@@ -90,13 +90,13 @@ request.interceptors.request.use((url, options) => {
   };
 });
 
-request.interceptors.response.use(async response => {
+request.interceptors.response.use(async (response) => {
   const data = await response.clone().json();
   if (response.status === 200 && _.isObject(data)) {
     if (!isUndefined(data.code) && data.code !== 0) {
       notification.error({
         message: `错误码 ${data.code}`,
-        description: data.message
+        description: data.message,
       });
     }
   }

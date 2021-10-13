@@ -1,36 +1,35 @@
 import request from '@/utils/request';
 import type { Role, RoleRequestParams } from './apiType';
 
-
 export async function getRoles(params: RoleRequestParams): Promise<any> {
   return request.get('/api/marvel-admin/roles', {
-    params
+    params,
   });
 }
 
 export async function getRole(payload: string): Promise<any> {
   return request.get('/api/marvel-admin/role', {
     params: {
-      id: payload
-    }
-  })
+      id: payload,
+    },
+  });
 }
 
 export async function createRole(payload: Role): Promise<any> {
   return request.post('/api/marvel-admin/role', {
-    data: payload
+    data: payload,
   });
 }
 
 export async function updateRole(payload: Role): Promise<any> {
   return request.put('/api/marvel-admin/role', {
-    data: payload
+    data: payload,
   });
 }
 
 export async function deleteRoles(payload: string[]): Promise<any> {
   return request.put('/api/marvel-admin/roles/invalidation', {
-    data: payload
+    data: payload,
   });
 }
 
@@ -50,19 +49,19 @@ export async function getMenus(): Promise<any> {
 export async function getPermissions(menuId: string): Promise<any> {
   return request.get(`/api/marvel-admin/permissions`, {
     params: {
-      menuId
-    }
+      menuId,
+    },
   });
 }
 
 export async function getRolePermissions(payload: string): Promise<any> {
   return request.get('/api/marvel-admin/role/permissions', {
-    params: { roleId: payload }
+    params: { roleId: payload },
   });
 }
 
 export async function saveRolePermissions(payload: any): Promise<any> {
   return request.post('/api/marvel-admin/role/permissions', {
-    data: payload
+    data: payload,
   });
 }

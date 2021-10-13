@@ -35,9 +35,9 @@ const GlobalModel: GlobalModelType = {
     *changeLayoutCollapsed({ payload }, { put }) {
       yield put({
         type: 'saveLayoutCollapsed',
-        payload
-      })
-    }
+        payload,
+      });
+    },
   },
 
   reducers: {

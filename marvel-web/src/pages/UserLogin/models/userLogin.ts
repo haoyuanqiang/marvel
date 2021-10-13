@@ -62,7 +62,7 @@ const Model: UserLoginModelType = {
     *logout(_, { call, put }) {
       yield call(accountLogout, {});
       yield put({
-        type: 'resetLoginStatus'
+        type: 'resetLoginStatus',
       });
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
@@ -93,8 +93,8 @@ const Model: UserLoginModelType = {
       return {
         ...state,
         status: undefined,
-      }
-    }
+      };
+    },
   },
 };
 

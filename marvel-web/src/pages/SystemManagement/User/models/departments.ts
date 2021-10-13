@@ -5,7 +5,7 @@ import { getDepartments } from '../services/services';
 export type DepartmentsModelState = {
   list: Department[];
   selectedKeys: string[];
-}
+};
 
 export type DeaprtmentsModelType = {
   namespace: 'departmentTree';
@@ -16,29 +16,29 @@ export type DeaprtmentsModelType = {
   reducers: {
     save: Reducer<DepartmentsModelState>;
   };
-}
+};
 
 function formatData(departments: Department[]): Department[] {
   if (!_.isArray(departments)) {
-    return []
+    return [];
   }
-  return _.map<Department, Department>(departments, item => ({
+  return _.map<Department, Department>(departments, (item) => ({
     ...item,
     key: item.id,
-    title: item.name
-  }))
+    title: item.name,
+  }));
 }
 
 function convertToTree(departments: Department[]): Department[] {
   if (!_.isArray(departments)) {
-    return []
+    return [];
   }
   const tmpMap = new Map<string, Department>();
   const result: Department[] = [];
-  _.forEach<Department>(departments, department => {
+  _.forEach<Department>(departments, (department) => {
     tmpMap.set(department.id, department);
   });
-  _.forEach<Department>(departments, department => {
+  _.forEach<Department>(departments, (department) => {
     const node = tmpMap.get(department.parentId);
     if (node && department.id !== department.parentId) {
       if (!_.isArray(node.children)) {
@@ -56,7 +56,7 @@ const DepartmentsModel: DeaprtmentsModelType = {
   namespace: 'departmentTree',
   state: {
     list: [],
-    selectedKeys: []
+    selectedKeys: [],
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -65,23 +65,23 @@ const DepartmentsModel: DeaprtmentsModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         departments = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: convertToTree(formatData(departments)) }
-      })
-    }
+        payload: { list: convertToTree(formatData(departments)) },
+      });
+    },
   },
   reducers: {
     save(state, { payload }): DepartmentsModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default DepartmentsModel;

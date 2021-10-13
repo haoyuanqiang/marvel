@@ -12,11 +12,11 @@ const { Content } = Layout;
 type DepartmentManagementProps = {
   dispatch: Dispatch;
   list: Department[];
-}
+};
 
 type DepartmentManagementState = {
   name: string;
-}
+};
 
 function findDepartments(departments: Department[], departmentName: string): Department[] {
   const list: Department[] = [];
@@ -25,20 +25,23 @@ function findDepartments(departments: Department[], departmentName: string): Dep
       list.push(_.cloneDeep(_.omit(department, 'children')));
     }
     if (_.isArray(department.children)) {
-      department.children.forEach(item => {
+      department.children.forEach((item) => {
         traceTree(item);
-      })
+      });
     }
-  }
+  };
   if (_.isArray(departments)) {
-    departments.forEach(item => {
+    departments.forEach((item) => {
       traceTree(item);
     });
   }
   return list;
 }
 
-class DepartmentManagement extends React.PureComponent<DepartmentManagementProps, DepartmentManagementState> {
+class DepartmentManagement extends React.PureComponent<
+  DepartmentManagementProps,
+  DepartmentManagementState
+> {
   columns = [
     {
       dataIndex: 'name',
@@ -60,12 +63,12 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
       render: (value) => {
         if (value === 1) {
           return <Tag color="processing">正常</Tag>;
-        } 
+        }
         if (value === 2) {
           return <Tag color="default">停用</Tag>;
         }
-        return <Tag color="warning">未知</Tag>
-      }
+        return <Tag color="warning">未知</Tag>;
+      },
     },
     {
       dataIndex: 'modifyTime',
@@ -77,7 +80,7 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
           return moment(value).format('YYYY-MM-DD HH:mm:ss');
         }
         return '';
-      }
+      },
     },
     {
       align: 'center',
@@ -87,39 +90,45 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
       render: (value, record) => {
         return (
           <Space size={8}>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onCreate({ parentId: record.id }) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onCreate({ parentId: record.id });
+              }}
             >
               新建
             </Button>
             <Divider type="vertical" style={{ margin: 0 }} />
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onEdit(record.id) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onEdit(record.id);
+              }}
             >
               修改
             </Button>
             <Divider type="vertical" style={{ margin: 0 }} />
-            <Button 
+            <Button
               danger
-              type="link" 
-              size="small" 
-              onClick={() => { this.onDeleteSingle(record.id) }}
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onDeleteSingle(record.id);
+              }}
             >
               删除
             </Button>
           </Space>
-        )
-      }
-    }
-  ]
+        );
+      },
+    },
+  ];
 
   state: DepartmentManagementState = {
     name: '',
-  }
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -129,43 +138,43 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
   onCreate = (params) => {
     const { dispatch } = this.props;
     dispatch({ type: 'departments/edit', payload: { ...params, isCreate: true } });
-  }
+  };
 
   onEdit = (id) => {
     const { dispatch } = this.props;
     dispatch({ type: 'departments/edit', payload: { isCreate: false, id } });
-  }
+  };
 
   onDeleteSingle = (id) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'departments/deleteSingle',
       payload: {
-        keys: [id]
-      }
-    })
-  }
+        keys: [id],
+      },
+    });
+  };
 
   onDelete = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'departments/delete'
-    })
-  }
+      type: 'departments/delete',
+    });
+  };
 
   onRowSelectionChange = (selectedRowKeys: string[]) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'departments/save',
       payload: {
-        selectedRowKeys
-      }
-    })
-  }
+        selectedRowKeys,
+      },
+    });
+  };
 
   onSearch = (value) => {
     this.setState({ name: value });
-  }
+  };
 
   render() {
     const { list, loading, selectedRowKeys } = this.props;
@@ -179,24 +188,15 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
         <Content style={{ height: '100%', padding: 16 }}>
           <div style={{ marginBottom: 8 }}>
             <Space size="small" direction="horizontal">
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />}
-                onClick={this.onCreate}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={this.onCreate}>
                 新建
               </Button>
-              <Button 
-                danger
-                type="default"
-                icon={<DeleteOutlined />}
-                onClick={this.onDelete}
-              >
+              <Button danger type="default" icon={<DeleteOutlined />} onClick={this.onDelete}>
                 删除
               </Button>
             </Space>
             <Space size="small" direction="horizontal" style={{ float: 'right' }}>
-              <Input.Search placeholder="请输入"  onSearch={this.onSearch} />
+              <Input.Search placeholder="请输入" onSearch={this.onSearch} />
             </Space>
           </div>
           <Table
@@ -208,7 +208,7 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
             rowSelection={{
               checkStrictly: false,
               selectedRowKeys,
-              onChange: this.onRowSelectionChange 
+              onChange: this.onRowSelectionChange,
             }}
             scroll={{ y: 'calc(100vh - 95px)' }}
           />
@@ -222,5 +222,5 @@ class DepartmentManagement extends React.PureComponent<DepartmentManagementProps
 export default connect(({ departments, loading }: ConnectState) => ({
   loading: loading.effects['departments/fetch'],
   list: departments.list,
-  selectedRowKeys: departments.selectedRowKeys
+  selectedRowKeys: departments.selectedRowKeys,
 }))(DepartmentManagement);

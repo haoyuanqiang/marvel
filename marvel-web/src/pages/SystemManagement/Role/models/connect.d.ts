@@ -3,9 +3,7 @@ import type { RoleEditorModelState } from './roleEditor';
 import type { RolePermissionModelState } from './permissionEditor';
 
 export * from '../services/apiType';
-export {
-  RoleModelState
-};
+export { RoleModelState };
 
 export interface Loading {
   global: boolean;

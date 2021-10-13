@@ -52,4 +52,4 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 }
 
-export default SecurityLayout; 
+export default SecurityLayout;

@@ -15,7 +15,7 @@ type RoleManagementProps = {
   list: Role[];
   searchKey: string;
   searchValue: string;
-}
+};
 
 class RoleManagement extends React.PureComponent<RoleManagementProps> {
   columns = [
@@ -39,12 +39,12 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
       render: (value) => {
         if (value === 1) {
           return <Tag color="processing">正常</Tag>;
-        } 
+        }
         if (value === 2) {
           return <Tag color="default">停用</Tag>;
         }
-        return <Tag color="warning">未知</Tag>
-      }
+        return <Tag color="warning">未知</Tag>;
+      },
     },
     {
       dataIndex: 'modifyTime',
@@ -56,7 +56,7 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
           return moment(value).format('YYYY-MM-DD HH:mm:ss');
         }
         return '';
-      }
+      },
     },
     {
       align: 'center',
@@ -66,26 +66,30 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
       render: (value, record) => {
         return (
           <Space size={8}>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onAssignPermission(record.id) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onAssignPermission(record.id);
+              }}
             >
               权限
             </Button>
             <Divider type="vertical" style={{ margin: 0 }} />
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onEdit(record.id) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onEdit(record.id);
+              }}
             >
               修改
             </Button>
           </Space>
-        )
-      }
-    }
-  ]
+        );
+      },
+    },
+  ];
 
   componentDidMount() {
     this.fetchData();
@@ -94,52 +98,52 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
   fetchData = () => {
     const { dispatch } = this.props;
     dispatch({ type: 'roles/fetch', payload: { pageSize: 20, current: 1 } });
-  }
+  };
 
   onCreate = (params) => {
     const { dispatch } = this.props;
     dispatch({ type: 'roles/edit', payload: { ...params, isCreate: true } });
-  }
+  };
 
   onEdit = (id) => {
     const { dispatch } = this.props;
     dispatch({ type: 'roles/edit', payload: { isCreate: false, id } });
-  }
+  };
 
   onDelete = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'roles/delete'
-    })
-  }
+      type: 'roles/delete',
+    });
+  };
 
   onAssignPermission = (id: string) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'rolePermission/fetchData',
-      payload: id
-    })
-  }
+      payload: id,
+    });
+  };
 
   onRowSelectionChange = (selectedRowKeys: string[]) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'roles/save',
       payload: {
-        selectedRowKeys
-      }
-    })
-  }
+        selectedRowKeys,
+      },
+    });
+  };
 
   onSearchKeyChange = (value) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'roles/save',
       payload: {
-        searchKey: value
-      }
-    })
-  }
+        searchKey: value,
+      },
+    });
+  };
 
   onSearchValueChange = (event) => {
     const { value } = event.target;
@@ -147,10 +151,10 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
     dispatch({
       type: 'roles/save',
       payload: {
-        searchValue: value
-      }
-    })
-  }
+        searchValue: value,
+      },
+    });
+  };
 
   render() {
     const { list, loading, selectedRowKeys, searchKey, searchValue } = this.props;
@@ -159,24 +163,15 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
         <Content style={{ height: '100%', padding: 16 }}>
           <div style={{ marginBottom: 8 }}>
             <Space size="small" direction="horizontal">
-              <Button 
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={this.onCreate}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={this.onCreate}>
                 新建
               </Button>
-              <Button 
-                danger
-                type="default"
-                icon={<DeleteOutlined />}
-                onClick={this.onDelete}
-              >
+              <Button danger type="default" icon={<DeleteOutlined />} onClick={this.onDelete}>
                 删除
               </Button>
             </Space>
             <Space size="small" direction="horizontal" style={{ float: 'right' }}>
-              <Input.Search 
+              <Input.Search
                 defaultValue={searchValue}
                 placeholder="请输入"
                 addonBefore={
@@ -196,10 +191,10 @@ class RoleManagement extends React.PureComponent<RoleManagementProps> {
             dataSource={list}
             pagination={false}
             loading={loading}
-            rowSelection={{ 
+            rowSelection={{
               checkStrictly: false,
               selectedRowKeys,
-              onChange: this.onRowSelectionChange 
+              onChange: this.onRowSelectionChange,
             }}
             scroll={{ y: 'calc(100vh - 95px)' }}
           />
@@ -216,5 +211,5 @@ export default connect(({ roles, loading }: ConnectState) => ({
   list: roles.list,
   selectedRowKeys: roles.selectedRowKeys,
   searchKey: roles.searchKey,
-  searchValue: roles.searchValue
+  searchValue: roles.searchValue,
 }))(RoleManagement);

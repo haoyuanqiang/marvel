@@ -9,21 +9,23 @@ type BasicInfoModifierProps = {
   dispatch: Dispatch;
   loading: boolean;
   userInfo: UserModelState;
-}
+};
 
 type BasicInfoModifierState = {
   formFields: any;
   isChanged: boolean;
-}
+};
 
-
-class BasicInfoModifier extends React.PureComponent<BasicInfoModifierProps, BasicInfoModifierState> {
+class BasicInfoModifier extends React.PureComponent<
+  BasicInfoModifierProps,
+  BasicInfoModifierState
+> {
   formRef = React.createRef<FormInstance>();
 
   state: BasicInfoModifierState = {
     formFields: {},
-    isChanged: false
-  }
+    isChanged: false,
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -34,35 +36,37 @@ class BasicInfoModifier extends React.PureComponent<BasicInfoModifierProps, Basi
         payload: {
           nickname: !_.isEmpty(fieldsValue.nickname) ? fieldsValue.nickname : undefined,
           telephone: !_.isEmpty(fieldsValue.telephone) ? fieldsValue.telephone : undefined,
-          email: !_.isEmpty(fieldsValue.email) ? fieldsValue.email : undefined
+          email: !_.isEmpty(fieldsValue.email) ? fieldsValue.email : undefined,
         },
         callback: (code) => {
           if (code === 0) {
             this.formRef.current.setFieldsValue({ nickname: '', telephone: '', email: '' });
-            this.setState({ isChanged: false })
+            this.setState({ isChanged: false });
           }
-        }
-      })
+        },
+      });
     }
-  }
+  };
 
   onReset = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({ nickname: '', telephone: '', email: '' });
     }
-  }
+  };
 
   render() {
     const { isChanged } = this.state;
     return (
       <Row>
         <Col span={12}>
-          <Form 
-            labelCol={{ span: 8 }} 
-            wrapperCol={{ span: 16 }} 
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
             size="large"
             ref={this.formRef}
-            onValuesChange={() => { this.setState({ isChanged: true })}}
+            onValuesChange={() => {
+              this.setState({ isChanged: true });
+            }}
           >
             <Form.Item name="nickname" label="用户昵称">
               <Input size="large" placeholder="请输入用户昵称" />
@@ -77,9 +81,13 @@ class BasicInfoModifier extends React.PureComponent<BasicInfoModifierProps, Basi
         </Col>
         <Col span={12} offset={4}>
           <Space>
-            <Button type="primary" onClick={this.onOk} disabled={!isChanged}>保存</Button>
-            <Button type="default" onClick={this.onReset} disabled={!isChanged}>重置</Button>
-          </Space> 
+            <Button type="primary" onClick={this.onOk} disabled={!isChanged}>
+              保存
+            </Button>
+            <Button type="default" onClick={this.onReset} disabled={!isChanged}>
+              重置
+            </Button>
+          </Space>
         </Col>
       </Row>
     );

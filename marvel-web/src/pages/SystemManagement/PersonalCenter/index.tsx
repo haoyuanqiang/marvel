@@ -13,10 +13,9 @@ const { TabPane } = Tabs;
 
 type PersonalCenterProps = {
   dispatch: Dispatch;
-}
+};
 
 class PersonalCenter extends React.PureComponent<PersonalCenterProps> {
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -31,12 +30,7 @@ class PersonalCenter extends React.PureComponent<PersonalCenterProps> {
           <PersonalInfo />
         </Sider>
         <Content>
-          <Card 
-            className={styles['marvel-card-shadow']} 
-            title={
-              <Title level={5}>基本资料</Title>
-            }
-          >
+          <Card className={styles['marvel-card-shadow']} title={<Title level={5}>基本资料</Title>}>
             <Tabs defaultActiveKey="1">
               <TabPane tab="基础资料" key="1">
                 <BasicInfoModifier />
@@ -48,7 +42,7 @@ class PersonalCenter extends React.PureComponent<PersonalCenterProps> {
           </Card>
         </Content>
       </Layout>
-    )
+    );
   }
 }
 

@@ -2,7 +2,7 @@ export type HttpResponse<T> = {
   code: number;
   message: string;
   result: T;
-}
+};
 
 /**
  * 菜单项类型定义

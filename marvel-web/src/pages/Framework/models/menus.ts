@@ -4,7 +4,7 @@ import { getMenus } from '../services/services';
 
 export type FrameworkMenusModelState = {
   list: Menu[];
-}
+};
 
 export type FrameworkMenusModelType = {
   namespace: 'frameworkMenus';
@@ -15,22 +15,22 @@ export type FrameworkMenusModelType = {
   reducers: {
     save: Reducer<FrameworkMenusModelState>;
   };
-}
+};
 
 function formatData(menus: Menu[]): Menu[] {
   if (!_.isArray(menus)) {
-    return []
+    return [];
   }
-  return _.map<Menu, Menu>(menus, item => ({
+  return _.map<Menu, Menu>(menus, (item) => ({
     ...item,
-    key: item.id
-  }))
+    key: item.id,
+  }));
 }
 
 const frameworkMenusModel: FrameworkMenusModelType = {
   namespace: 'frameworkMenus',
   state: {
-    list: []
+    list: [],
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -39,23 +39,23 @@ const frameworkMenusModel: FrameworkMenusModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         menus = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: formatData(menus) }
-      })
-    }
+        payload: { list: formatData(menus) },
+      });
+    },
   },
   reducers: {
     save(state, { payload }): FrameworkMenusModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default frameworkMenusModel;

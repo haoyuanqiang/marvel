@@ -14,22 +14,25 @@ type PermissionEditorProps = {
   timestamp: number;
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 type PermissionEditorState = {
   formFields: any;
   timestamp: number;
-}
+};
 
 class PermissionEditor extends React.PureComponent<PermissionEditorProps, PermissionEditorState> {
   formRef = React.createRef<FormInstance>();
 
   state: PermissionEditorState = {
     formFields: {},
-    timestamp: 0
-  }
+    timestamp: 0,
+  };
 
-  static getDerivedStateFromProps(nextProps: PermissionEditorProps, prevState: PermissionEditorState) {
+  static getDerivedStateFromProps(
+    nextProps: PermissionEditorProps,
+    prevState: PermissionEditorState,
+  ) {
     const { entity, timestamp } = nextProps;
     const { timestamp: prevTimestamp } = prevState;
     if (timestamp !== prevTimestamp) {
@@ -41,8 +44,8 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
       }
       return {
         formFields: entity,
-        timestamp
-      }
+        timestamp,
+      };
     }
     return null;
   }
@@ -50,10 +53,10 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `MP_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `MP_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -68,15 +71,15 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
           if (code === 0) {
             this.onCancel();
           }
-        }
-      })
+        },
+      });
     }
-  }
-  
+  };
+
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'permissionEditor/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'permissionEditor/save', payload: { visible: false } });
+  };
 
   render() {
     const { type, visible } = this.props;
@@ -104,9 +107,9 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
                 label="权限编码"
                 name="code"
                 rules={[
-                  { required: true }, 
+                  { required: true },
                   { type: 'string', max: 127 },
-                  { type: 'regexp', pattern: /^\w+$/g, message: '只允许英文字母 、数字和下划线' }
+                  { type: 'regexp', pattern: /^\w+$/g, message: '只允许英文字母 、数字和下划线' },
                 ]}
               >
                 <Input suffix={<CodeSandboxOutlined onClick={this.generateCode} />} />
@@ -117,9 +120,13 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
                 label="权限名称"
                 name="name"
                 rules={[
-                  { required: true }, 
+                  { required: true },
                   { type: 'string', max: 127 },
-                  { type: 'regexp', pattern: /^[一-鿿\w]+$/g, message: '只允许中文字、英文字母、数字和下划线' }
+                  {
+                    type: 'regexp',
+                    pattern: /^[一-鿿\w]+$/g,
+                    message: '只允许中文字、英文字母、数字和下划线',
+                  },
                 ]}
               >
                 <Input />
@@ -149,7 +156,7 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
                 name="sortNumber"
                 rules={[{ required: true }, { type: 'integer', message: '必须为整数' }]}
               >
-                <InputNumber style={{ width: '100%' }}  />
+                <InputNumber style={{ width: '100%' }} />
               </Form.Item>
             </Col>
             <Col span={24}>
@@ -163,11 +170,10 @@ class PermissionEditor extends React.PureComponent<PermissionEditorProps, Permis
                 <Input />
               </Form.Item>
             </Col>
-            
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -177,5 +183,5 @@ export default connect(({ permissionEditor, loading }: ConnectState) => ({
   menuId: permissionEditor.menuId,
   timestamp: permissionEditor.timestamp,
   type: permissionEditor.type,
-  visible: permissionEditor.visible
+  visible: permissionEditor.visible,
 }))(PermissionEditor);

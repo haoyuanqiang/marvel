@@ -8,7 +8,7 @@ export type PermissionsModelState = {
   list: Permission[];
   selectedKeys: string[];
   menuId?: string;
-}
+};
 
 export type PermissionsModelType = {
   namespace: 'permissions';
@@ -21,16 +21,16 @@ export type PermissionsModelType = {
   reducers: {
     save: Reducer<PermissionsModelState>;
   };
-}
+};
 
 function formatData(permissions: Permission[]): Permission[] {
   if (!_.isArray(permissions)) {
-    return []
+    return [];
   }
-  return _.map<Permission, Permission>(permissions, item => ({
+  return _.map<Permission, Permission>(permissions, (item) => ({
     ...item,
     key: item.id,
-  }))
+  }));
 }
 
 const PermissionsModel: PermissionsModelType = {
@@ -42,23 +42,23 @@ const PermissionsModel: PermissionsModelType = {
   },
   effects: {
     *change({ payload }, { put }) {
-      yield put ({
+      yield put({
         type: 'save',
         payload,
       });
       yield put({ type: 'fetch' });
     },
     *fetch(__, { call, put, select }) {
-      const state: PermissionsModelState = yield select(states => states.permissions);
+      const state: PermissionsModelState = yield select((states) => states.permissions);
       const response: HttpResponse<Permission[]> = yield call(getPermissions, state.menuId);
       let permissions = [];
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         permissions = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: formatData(permissions) }
-      })
+        payload: { list: formatData(permissions) },
+      });
     },
     *edit({ callback, payload }, { call, put }) {
       const { id, isCreate, ...rest } = payload;
@@ -68,9 +68,9 @@ const PermissionsModel: PermissionsModelType = {
           payload: {
             entity: { ...rest },
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
         const response: HttpResponse<Permission> = yield call(getPermission, id);
         if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
@@ -80,8 +80,8 @@ const PermissionsModel: PermissionsModelType = {
             payload: {
               entity: permission,
               type: 'update',
-              visible: true
-            }
+              visible: true,
+            },
           });
         } else if (_.isFunction(callback)) {
           callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
@@ -89,7 +89,7 @@ const PermissionsModel: PermissionsModelType = {
       }
     },
     *delete(__, { call, select, put }) {
-      const state: PermissionsModelState = yield select(states => states.permissions);
+      const state: PermissionsModelState = yield select((states) => states.permissions);
       const { selectedKeys } = state;
       if (_.isArray(selectedKeys) && !_.isEmpty(selectedKeys)) {
         const response = yield call(deletePermissions, selectedKeys);
@@ -97,27 +97,27 @@ const PermissionsModel: PermissionsModelType = {
           yield put({
             type: 'save',
             payload: {
-              selectedKeys: []
-            }
-          })
+              selectedKeys: [],
+            },
+          });
           yield put({
-            type: 'fetch'
-          })
+            type: 'fetch',
+          });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): PermissionsModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default PermissionsModel;

@@ -36,8 +36,8 @@ const OpenedTabsModel: OpenedTabsModelType = {
       {
         key: 'HOME',
         name: '首页',
-        path: '/welcome'
-      }
+        path: '/welcome',
+      },
     ],
     activeTabPane: 'HOME',
   },
@@ -48,12 +48,12 @@ const OpenedTabsModel: OpenedTabsModelType = {
         yield put({
           type: 'activeTabPane',
           payload,
-        })
+        });
       }
     },
     *add({ payload }, { put }) {
       if (isObject(payload)) {
-         yield put({
+        yield put({
           type: 'addTabPane',
           payload,
         });
@@ -61,12 +61,12 @@ const OpenedTabsModel: OpenedTabsModelType = {
     },
     *remove({ payload }, { put }) {
       if (isObject(payload)) {
-         yield put({
+        yield put({
           type: 'removeTanPane',
           payload,
         });
       }
-    }
+    },
   },
 
   reducers: {
@@ -76,25 +76,25 @@ const OpenedTabsModel: OpenedTabsModelType = {
       let nextTabPanes: IframeTabPane[] = [];
       if (state) {
         ({ activeTabPane: nextActiveTabPane, tabPanes: nextTabPanes } = state);
-        const tanPane = nextTabPanes.find(value => value.key === key);
+        const tanPane = nextTabPanes.find((value) => value.key === key);
         nextActiveTabPane = get(tanPane, 'key', nextActiveTabPane);
       }
       return {
         ...state,
         activeTabPane: nextActiveTabPane,
-        tabPanes: nextTabPanes
-      }
+        tabPanes: nextTabPanes,
+      };
     },
     addTabPane(state, { payload }) {
       const nextTabPanes: IframeTabPane[] = [];
       if (state) {
         const { tabPanes } = state;
-        const index = tabPanes.findIndex(value => value.key === payload.id);
+        const index = tabPanes.findIndex((value) => value.key === payload.id);
         if (index >= 0) {
           return {
             ...state,
-            activeTabPane: payload.id
-          }
+            activeTabPane: payload.id,
+          };
         }
         nextTabPanes.push(...tabPanes);
       }
@@ -127,9 +127,9 @@ const OpenedTabsModel: OpenedTabsModelType = {
       return {
         ...state,
         tabPanes: nextTabPanes,
-        activeTabPane: nextActiveTabPane
-      }
-    }
+        activeTabPane: nextActiveTabPane,
+      };
+    },
   },
 };
 

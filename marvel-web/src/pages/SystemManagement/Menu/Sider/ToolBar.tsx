@@ -36,14 +36,13 @@ function findMenuItem(menus: MenuItem[], key: string | undefined): MenuItem | nu
 }
 
 class ToolBar extends React.PureComponent<MenuToolBarProps, MenuToolBarState> {
-
-  state: MenuToolBarState = {}
+  state: MenuToolBarState = {};
 
   static getDerivedStateFromProps(nextProps: MenuTreeEditorProps) {
     const nextState: MenuToolBarState = {
       disableEdit: true,
       disableDel: true,
-      disableMove: true
+      disableMove: true,
     };
     const { menus, selectedKeys } = nextProps;
     nextState.disableMove = _.isEmpty(menus);
@@ -61,36 +60,31 @@ class ToolBar extends React.PureComponent<MenuToolBarProps, MenuToolBarState> {
     const { dispatch } = this.props;
     dispatch({
       type: 'menuEditor/initialize',
-      payload: { isCreate: true }
+      payload: { isCreate: true },
     });
-  }
+  };
 
   onMenuModify = (): void => {
     const { dispatch } = this.props;
     dispatch({
       type: 'menuEditor/initialize',
-      payload: { isCreate: false }
+      payload: { isCreate: false },
     });
-  }
+  };
 
   onDelete = (): void => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'menuManagement/delete'
+      type: 'menuManagement/delete',
     });
-  }
+  };
 
   render(): React.ReactNode {
     const { disableEdit, disableDel, disableMove } = this.state;
     return (
       <Space className={styles['marvel-sider-toolbox']}>
         <Tooltip title="新建">
-          <Button
-            icon={<PlusOutlined />}
-            size="small"
-            type="primary"
-            onClick={this.onMenuAdd}
-          />
+          <Button icon={<PlusOutlined />} size="small" type="primary" onClick={this.onMenuAdd} />
         </Tooltip>
         <Tooltip title="修改">
           <Button
@@ -100,7 +94,7 @@ class ToolBar extends React.PureComponent<MenuToolBarProps, MenuToolBarState> {
             style={{
               backgroundColor: '#87d068',
               borderColor: '#87d068',
-              color: 'white'
+              color: 'white',
             }}
             onClick={this.onMenuModify}
           />
@@ -122,16 +116,16 @@ class ToolBar extends React.PureComponent<MenuToolBarProps, MenuToolBarState> {
             style={{
               backgroundColor: '#87d068',
               borderColor: '#87d068',
-              color: 'white'
+              color: 'white',
             }}
           />
         </Tooltip>
       </Space>
-    )
+    );
   }
 }
 
 export default connect(({ menuManagement }: ConnectState) => ({
   menus: menuManagement.list,
-  selectedKeys: menuManagement.selectedKeys
+  selectedKeys: menuManagement.selectedKeys,
 }))(ToolBar);

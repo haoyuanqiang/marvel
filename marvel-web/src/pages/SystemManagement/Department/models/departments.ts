@@ -13,13 +13,12 @@ export type Department = {
   parentId: string;
   modifyTime: number;
   children?: Department[];
-}
+};
 
 export type DepartmentsModelState = {
   list: Department[];
   selectedRowKeys: string[];
-}
-
+};
 
 export type DeaprtmentsModelType = {
   namespace: 'departments';
@@ -33,29 +32,29 @@ export type DeaprtmentsModelType = {
   reducers: {
     save: Reducer<DepartmentsModelState>;
   };
-}
+};
 
 function formatData(departments: Department[]): Department[] {
   if (!_.isArray(departments)) {
-    return []
+    return [];
   }
-  return _.map<Department, Department>(departments, item => ({
+  return _.map<Department, Department>(departments, (item) => ({
     ...item,
     key: item.id,
-    title: item.name
-  }))
+    title: item.name,
+  }));
 }
 
 function convertToTree(departments: Department[]): Department[] {
   if (!_.isArray(departments)) {
-    return []
+    return [];
   }
   const tmpMap = new Map<string, Department>();
   const result: Department[] = [];
-  _.forEach<Department>(departments, department => {
+  _.forEach<Department>(departments, (department) => {
     tmpMap.set(department.id, department);
   });
-  _.forEach<Department>(departments, department => {
+  _.forEach<Department>(departments, (department) => {
     const node = tmpMap.get(department.parentId);
     if (node && department.id !== department.parentId) {
       if (!_.isArray(node.children)) {
@@ -73,7 +72,7 @@ const DepartmentsModel: DeaprtmentsModelType = {
   namespace: 'departments',
   state: {
     list: [],
-    selectedRowKeys: []
+    selectedRowKeys: [],
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -82,10 +81,10 @@ const DepartmentsModel: DeaprtmentsModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         departments = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: convertToTree(formatData(departments)) }
-      })
+        payload: { list: convertToTree(formatData(departments)) },
+      });
     },
     *edit({ callback, payload }, { call, put }) {
       const { id, isCreate, ...rest } = payload;
@@ -95,9 +94,9 @@ const DepartmentsModel: DeaprtmentsModelType = {
           payload: {
             entity: { ...rest },
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
         const response: HttpResponse<Department> = yield call(getDepartment, id);
         if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
@@ -107,8 +106,8 @@ const DepartmentsModel: DeaprtmentsModelType = {
             payload: {
               entity: department,
               type: 'update',
-              visible: true
-            }
+              visible: true,
+            },
           });
         } else if (_.isFunction(callback)) {
           callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
@@ -116,13 +115,13 @@ const DepartmentsModel: DeaprtmentsModelType = {
       }
     },
     *delete(__, { call, select, put }) {
-      const state: DepartmentsModelState = yield select(states => states.departments);
+      const state: DepartmentsModelState = yield select((states) => states.departments);
       const { selectedRowKeys } = state;
       if (_.isArray(selectedRowKeys) && !_.isEmpty(selectedRowKeys)) {
         const response = yield call(deleteDepartments, selectedRowKeys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'departments/fetch'
+            type: 'departments/fetch',
           });
         }
       }
@@ -133,23 +132,23 @@ const DepartmentsModel: DeaprtmentsModelType = {
         const response = yield call(deleteDepartments, keys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'departments/fetch'
+            type: 'departments/fetch',
           });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): DepartmentsModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default DepartmentsModel;

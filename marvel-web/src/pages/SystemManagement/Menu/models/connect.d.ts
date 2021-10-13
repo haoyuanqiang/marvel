@@ -12,7 +12,7 @@ export interface Loading {
     menuManagement?: boolean;
     menuEditor?: boolean;
     permissions?: boolean;
-    permissionEditor?: boolean; 
+    permissionEditor?: boolean;
   };
 }
 

@@ -11,7 +11,7 @@ export interface Loading {
   models: {
     frameworkMenus?: boolean;
     loginUser?: boolean;
-    openedTabs?: boolean; 
+    openedTabs?: boolean;
   };
 }
 

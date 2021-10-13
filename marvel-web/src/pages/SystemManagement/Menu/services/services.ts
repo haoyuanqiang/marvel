@@ -16,8 +16,8 @@ export async function getMenus(): Promise<any> {
 export async function getMenu(menuId: string): Promise<any> {
   return request.get(`${serverUrl}/menu`, {
     params: {
-      id: menuId
-    }
+      id: menuId,
+    },
   });
 }
 
@@ -27,7 +27,7 @@ export async function getMenu(menuId: string): Promise<any> {
  */
 export async function createMenu(payload: MenuType): Promise<any> {
   return request.post(`${serverUrl}/menu`, {
-    data: payload
+    data: payload,
   });
 }
 
@@ -37,7 +37,7 @@ export async function createMenu(payload: MenuType): Promise<any> {
  */
 export async function updateMenu(payload: MenuType): Promise<any> {
   return request.put(`${serverUrl}/menu`, {
-    data: payload
+    data: payload,
   });
 }
 
@@ -47,8 +47,8 @@ export async function updateMenu(payload: MenuType): Promise<any> {
  */
 export async function deleteMenus(payload: string[]): Promise<any> {
   return request.put(`${serverUrl}/menus/invalidation`, {
-    data: payload
-  })
+    data: payload,
+  });
 }
 
 /**
@@ -58,9 +58,9 @@ export async function deleteMenus(payload: string[]): Promise<any> {
 export async function getPermissions(menuId: string): Promise<any> {
   return request.get(`${serverUrl}/permissions`, {
     params: {
-      menuId
-    }
-  })
+      menuId,
+    },
+  });
 }
 
 /**
@@ -69,8 +69,8 @@ export async function getPermissions(menuId: string): Promise<any> {
 export async function getPermission(permissionId: string): Promise<any> {
   return request.get(`${serverUrl}/permission`, {
     params: {
-      id: permissionId
-    }
+      id: permissionId,
+    },
   });
 }
 
@@ -80,7 +80,7 @@ export async function getPermission(permissionId: string): Promise<any> {
  */
 export async function createPermission(payload: PermissionType): Promise<any> {
   return request.post(`${serverUrl}/permission`, {
-    data: payload
+    data: payload,
   });
 }
 
@@ -90,7 +90,7 @@ export async function createPermission(payload: PermissionType): Promise<any> {
  */
 export async function updatePermission(payload: PermissionType): Promise<any> {
   return request.put(`${serverUrl}/permission`, {
-    data: payload
+    data: payload,
   });
 }
 
@@ -100,6 +100,6 @@ export async function updatePermission(payload: PermissionType): Promise<any> {
  */
 export async function deletePermissions(payload: string[]): Promise<any> {
   return request.put(`${serverUrl}/permissions/invalidation`, {
-    data: payload
-  })
+    data: payload,
+  });
 }

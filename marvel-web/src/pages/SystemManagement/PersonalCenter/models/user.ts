@@ -2,7 +2,7 @@ import type { Reducer, Effect } from 'umi';
 import type { HttpResponse, UserInfo } from '../services/apiType';
 import { getUserInfo, updateUserInfo, updateUserPassword } from '../services/services';
 
-export type UserModelState = UserInfo & { timestamp: number; };
+export type UserModelState = UserInfo & { timestamp: number };
 
 export type UserModelType = {
   namespace: 'userInfo';
@@ -15,12 +15,12 @@ export type UserModelType = {
   reducers: {
     save: Reducer<UserModelState>;
   };
-}
+};
 
 const userModel: UserModelType = {
   namespace: 'userInfo',
   state: {
-    timestamp: 0
+    timestamp: 0,
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -29,27 +29,27 @@ const userModel: UserModelType = {
       if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
         user = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { ...user }
-      })
+        payload: { ...user },
+      });
     },
     *updateUserInfo({ payload }, { call, put }) {
       const response: HttpResponse<void> = yield call(updateUserInfo, payload);
       if (_.isObject(response) && response.code === 0) {
         yield put({
-          type: 'fetch'
-        })
+          type: 'fetch',
+        });
       }
     },
     *updatePassword({ payload }, { call, put }) {
       const response: HttpResponse<void> = yield call(updateUserPassword, payload);
       if (_.isObject(response) && response.code === 0) {
         yield put({
-          type: 'fetch'
-        })
+          type: 'fetch',
+        });
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): UserModelState {
@@ -57,12 +57,12 @@ const userModel: UserModelType = {
         return {
           ...state,
           ...payload,
-          timestamp: Date.now()
-        }
+          timestamp: Date.now(),
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default userModel;

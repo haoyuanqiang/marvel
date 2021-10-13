@@ -6,36 +6,37 @@ import type { Dispatch } from 'umi';
 import { CodeSandboxOutlined } from '@ant-design/icons';
 import type { ConnectState, Department } from './models/connect';
 
-
 type DepartmentEditorProps = {
   dispatch: Dispatch;
   data: Department;
   departments: Department[];
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 type DepartmentEditorState = {
   formFields: any;
   timestamp: number;
-}
+};
 
 function ignoreSelf(departments: Department[], departmentId: string): Department[] {
   if (!_.isArray(departments)) {
-    return []
+    return [];
   }
-  return departments.map(value => {
-    if (value.id === departmentId) {
-      return null;
-    }
-    if (_.isArray(value.children) && !_.isEmpty(value.children)) {
-      return {
-        ...value,
-        children: ignoreSelf(value.children, departmentId)
+  return departments
+    .map((value) => {
+      if (value.id === departmentId) {
+        return null;
       }
-    }
-    return value;
-  }).filter(v => !!v);
+      if (_.isArray(value.children) && !_.isEmpty(value.children)) {
+        return {
+          ...value,
+          children: ignoreSelf(value.children, departmentId),
+        };
+      }
+      return value;
+    })
+    .filter((v) => !!v);
 }
 
 class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
@@ -43,8 +44,8 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
 
   state: DepartmentEditorState = {
     formFields: {},
-    timestamp: 0
-  }
+    timestamp: 0,
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data, timestamp } = nextProps;
@@ -61,8 +62,8 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
       }
       return {
         formFields: data,
-        timestamp
-      }
+        timestamp,
+      };
     }
     return null;
   }
@@ -70,10 +71,10 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `DP_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `DP_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -82,7 +83,7 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
         fieldsValue.parentId = null;
       }
       const { dispatch, type, data } = this.props;
-      
+
       _.merge(fieldsValue, _.pick(data, 'id'));
       dispatch({
         type: `departmentEditor/${type}`,
@@ -91,28 +92,30 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
           if (code === 0) {
             this.onCancel();
           }
-        }
-      })
+        },
+      });
     }
-  }
-  
+  };
+
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'departmentEditor/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'departmentEditor/save', payload: { visible: false } });
+  };
 
   render() {
     const { departments, type, visible } = this.props;
     const { formFields } = this.state;
     let treeData = [];
     if (visible) {
-      treeData = [{ key: 'root', title: '根目录', children: ignoreSelf(departments, formFields.id) }];
+      treeData = [
+        { key: 'root', title: '根目录', children: ignoreSelf(departments, formFields.id) },
+      ];
     }
     return (
       <Modal
         destroyOnClose
         maskClosable={false}
-        title={`${type === 'create' ? '新建' : '修改'}部门`} 
+        title={`${type === 'create' ? '新建' : '修改'}部门`}
         visible={visible}
         onCancel={this.onCancel}
         onOk={this.onOk}
@@ -127,11 +130,7 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
         >
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                label="上级部门"
-                name="parentId"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="上级部门" name="parentId" rules={[{ required: true }]}>
                 <TreeSelect allowClear treeData={treeData} treeDefaultExpandedKeys={['root']} />
               </Form.Item>
             </Col>
@@ -141,10 +140,7 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
                 labelCol={2}
                 wrapperCol={10}
                 name="code"
-                rules={[
-                  { required: true },
-                  { type: 'string', max: 127 }
-                ]}
+                rules={[{ required: true }, { type: 'string', max: 127 }]}
               >
                 <Input suffix={<CodeSandboxOutlined onClick={this.generateCode} />} />
               </Form.Item>
@@ -155,10 +151,7 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
                 labelCol={2}
                 wrapperCol={10}
                 name="name"
-                rules={[
-                  { required: true },
-                  { type: 'string', max: 127 }
-                ]}
+                rules={[{ required: true }, { type: 'string', max: 127 }]}
               >
                 <Input />
               </Form.Item>
@@ -169,12 +162,9 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
                 labelCol={2}
                 wrapperCol={10}
                 name="sortNumber"
-                rules={[
-                  { required: true },
-                  { type: 'integer', message: '显示排序必须为整数' }
-                ]}
+                rules={[{ required: true }, { type: 'integer', message: '显示排序必须为整数' }]}
               >
-                <InputNumber defaultValue={0} style={{ width: '100%' }}  />
+                <InputNumber defaultValue={0} style={{ width: '100%' }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -194,7 +184,7 @@ class DepartmentEditor extends React.PureComponent<DepartmentEditorProps> {
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -204,5 +194,5 @@ export default connect(({ departmentEditor, departments, loading }: ConnectState
   departments: departments.list,
   timestamp: departmentEditor.timestamp,
   type: departmentEditor.type,
-  visible: departmentEditor.visible
+  visible: departmentEditor.visible,
 }))(DepartmentEditor);

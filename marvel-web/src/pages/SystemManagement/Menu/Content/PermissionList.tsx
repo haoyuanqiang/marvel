@@ -3,7 +3,7 @@ import type { Dispatch } from 'umi';
 import { connect } from 'umi';
 import { Space, Typography, Table, Button, Tag, Modal } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import type { Permission, Menu, ConnectState } from '../models/connect'
+import type { Permission, Menu, ConnectState } from '../models/connect';
 import PermissionEditor from './PermissionEditor';
 
 const { Text } = Typography;
@@ -13,14 +13,14 @@ type PermissionListProps = {
   menu: Menu;
   permissions?: Permission[];
   selectedKeys?: string[];
-}
+};
 
 const TAG_COLOR_POOL = {
   GET: '#8CC5FF',
   POST: '#67C23A',
   PUT: '#E6A23C',
-  DELETE: '#F56C6C'
-}
+  DELETE: '#F56C6C',
+};
 
 class PermissionList extends React.PureComponent<PermissionListProps> {
   columns = [
@@ -28,7 +28,7 @@ class PermissionList extends React.PureComponent<PermissionListProps> {
       align: 'center',
       dataIndex: 'serial',
       title: '序号',
-      render: (value, record, index) => (index + 1),
+      render: (value, record, index) => index + 1,
       width: 60,
     },
     {
@@ -48,9 +48,9 @@ class PermissionList extends React.PureComponent<PermissionListProps> {
       ellipsis: true,
       title: '请求方法',
       width: 90,
-      render: value => {
-        return <Tag color={TAG_COLOR_POOL[value] || "#87d068"}>{value}</Tag>
-      }
+      render: (value) => {
+        return <Tag color={TAG_COLOR_POOL[value] || '#87d068'}>{value}</Tag>;
+      },
     },
     {
       dataIndex: 'route',
@@ -72,77 +72,74 @@ class PermissionList extends React.PureComponent<PermissionListProps> {
       render: (value, record) => {
         return (
           <Space size={8}>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onEdit(record.id) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onEdit(record.id);
+              }}
             >
               修改
             </Button>
           </Space>
-        )
-      }
-    }
-  ]
+        );
+      },
+    },
+  ];
 
   onCreate = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'permissionEditor/initialize',
-      payload: { isCreate: true }
+      payload: { isCreate: true },
     });
-  }
+  };
 
   onEdit = (id) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'permissionEditor/initialize',
-      payload: { isCreate: false, id }
+      payload: { isCreate: false, id },
     });
-  }
+  };
 
   onDelete = () => {
-    Modal.confirm({ 
+    Modal.confirm({
       title: '确定要删除吗？',
       onOk: () => {
         const { dispatch } = this.props;
         dispatch({
-          type: 'permissions/delete'
-        })
-      }
+          type: 'permissions/delete',
+        });
+      },
     });
-  }
+  };
 
   onTableSelectedChange = (selectedRowKeys) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'permissions/save',
       payload: {
-        selectedKeys: selectedRowKeys
-      }
-    })
-  }
+        selectedKeys: selectedRowKeys,
+      },
+    });
+  };
 
   renderHeader = () => {
     const { selectedKeys } = this.props;
     return (
       <Space>
-        <Button 
-          icon={<PlusOutlined />} 
-          shape="circle" 
-          type="primary"
-          onClick={this.onCreate}
-        />
+        <Button icon={<PlusOutlined />} shape="circle" type="primary" onClick={this.onCreate} />
         <Button
           danger
           disabled={_.isEmpty(selectedKeys)}
-          icon={<DeleteOutlined />} 
-          shape="circle" 
+          icon={<DeleteOutlined />}
+          shape="circle"
           onClick={this.onDelete}
         />
       </Space>
-    )
-  }
+    );
+  };
 
   render(): React.ReactNode {
     const { permissions, selectedKeys } = this.props;
@@ -161,9 +158,9 @@ class PermissionList extends React.PureComponent<PermissionListProps> {
             rowSelection={{
               columnWidth: 40,
               onChange: this.onTableSelectedChange,
-              selectedRowKeys: selectedKeys
+              selectedRowKeys: selectedKeys,
             }}
-            scroll={{ y: 'calc(100vh - 260px)'}}
+            scroll={{ y: 'calc(100vh - 260px)' }}
             title={this.renderHeader}
           />
         </div>
@@ -175,5 +172,5 @@ class PermissionList extends React.PureComponent<PermissionListProps> {
 
 export default connect(({ permissions }: ConnectState) => ({
   permissions: permissions.list,
-  selectedKeys: permissions.selectedKeys
+  selectedKeys: permissions.selectedKeys,
 }))(PermissionList);

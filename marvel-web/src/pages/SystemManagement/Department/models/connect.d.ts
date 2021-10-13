@@ -1,13 +1,7 @@
-import type {
-  Department,
-  DepartmentsModelState
-} from './departments';
+import type { Department, DepartmentsModelState } from './departments';
 import type { DepartmentEditorModelState } from './departmentEditor';
 
-export {
-  Department,
-  DepartmentModelState
-};
+export { Department, DepartmentModelState };
 
 export interface Loading {
   global: boolean;

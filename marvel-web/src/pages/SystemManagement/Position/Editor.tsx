@@ -6,36 +6,37 @@ import type { Dispatch } from 'umi';
 import { CodeSandboxOutlined } from '@ant-design/icons';
 import type { ConnectState, Position } from './models/connect';
 
-
 type PositionEditorProps = {
   dispatch: Dispatch;
   data: Position;
   positions: Position[];
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 type PositionEditorState = {
   formFields: any;
   timestamp: number;
-}
+};
 
 function ignoreSelf(positions: Position[], positionId: string): Position[] {
   if (!_.isArray(positions)) {
-    return []
+    return [];
   }
-  return positions.map(value => {
-    if (value.id === positionId) {
-      return null;
-    }
-    if (_.isArray(value.children) && !_.isEmpty(value.children)) {
-      return {
-        ...value,
-        children: ignoreSelf(value.children, positionId)
+  return positions
+    .map((value) => {
+      if (value.id === positionId) {
+        return null;
       }
-    }
-    return value;
-  }).filter(v => !!v);
+      if (_.isArray(value.children) && !_.isEmpty(value.children)) {
+        return {
+          ...value,
+          children: ignoreSelf(value.children, positionId),
+        };
+      }
+      return value;
+    })
+    .filter((v) => !!v);
 }
 
 class PositionEditor extends React.PureComponent<PositionEditorProps> {
@@ -43,8 +44,8 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
 
   state: PositionEditorState = {
     formFields: {},
-    timestamp: 0
-  }
+    timestamp: 0,
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data, timestamp } = nextProps;
@@ -61,8 +62,8 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
       }
       return {
         formFields: data,
-        timestamp
-      }
+        timestamp,
+      };
     }
     return null;
   }
@@ -70,10 +71,10 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `PN_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `PN_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -82,7 +83,7 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
         fieldsValue.parentId = null;
       }
       const { dispatch, type, data } = this.props;
-      
+
       _.merge(fieldsValue, _.pick(data, 'id'));
       dispatch({
         type: `positionEditor/${type}`,
@@ -91,15 +92,15 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
           if (code === 0) {
             this.onCancel();
           }
-        }
-      })
+        },
+      });
     }
-  }
-  
+  };
+
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'positionEditor/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'positionEditor/save', payload: { visible: false } });
+  };
 
   render() {
     const { positions, type, visible } = this.props;
@@ -112,7 +113,7 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
       <Modal
         destroyOnClose
         maskClosable={false}
-        title={`${type === 'create' ? '新建' : '修改'}岗位`} 
+        title={`${type === 'create' ? '新建' : '修改'}岗位`}
         visible={visible}
         onCancel={this.onCancel}
         onOk={this.onOk}
@@ -128,11 +129,7 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
         >
           <Row>
             <Col span={24}>
-              <Form.Item
-                label="上级岗位"
-                name="parentId"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="上级岗位" name="parentId" rules={[{ required: true }]}>
                 <TreeSelect allowClear treeData={treeData} treeDefaultExpandedKeys={['root']} />
               </Form.Item>
             </Col>
@@ -168,12 +165,9 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
                 labelCol={2}
                 wrapperCol={10}
                 name="sortNumber"
-                rules={[
-                  { required: true },
-                  { type: 'integer', message: '显示排序必须为整数' }
-                ]}
+                rules={[{ required: true }, { type: 'integer', message: '显示排序必须为整数' }]}
               >
-                <InputNumber defaultValue={0} style={{ width: '100%' }}  />
+                <InputNumber defaultValue={0} style={{ width: '100%' }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -193,7 +187,7 @@ class PositionEditor extends React.PureComponent<PositionEditorProps> {
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -203,5 +197,5 @@ export default connect(({ positionEditor, positions, loading }: ConnectState) =>
   positions: positions.list,
   timestamp: positionEditor.timestamp,
   type: positionEditor.type,
-  visible: positionEditor.visible
+  visible: positionEditor.visible,
 }))(PositionEditor);

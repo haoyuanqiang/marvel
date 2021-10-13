@@ -1,8 +1,6 @@
 import React from 'react';
-import { Dropdown, Menu, Space } from 'antd';
+import { Dropdown, Menu } from 'antd';
 import classNames from 'classnames';
-// import { RiFlagFill } from "@react-icons/all-files/ri/RiFlagFill";
-// import { TiArrowSortedDown } from '@react-icons/all-files/ti/TiArrowSortedDown';
 import { CaretDownOutlined, FlagFilled } from '@ant-design/icons';
 import styles from './index.less';
 
@@ -11,7 +9,6 @@ interface SelectLanguageProps {
 }
 
 class SelectLanguage extends React.PureComponent<SelectLanguageProps> {
-
   render() {
     const { className } = this.props;
     const menu = (
@@ -30,15 +27,13 @@ class SelectLanguage extends React.PureComponent<SelectLanguageProps> {
         overlayClassName={styles['marvel-selectLang-overlay']}
         trigger={['click']}
       >
-        <div
-          className={classNames(styles['marvel-selectLang'], className)}
-        >
+        <div className={classNames(styles['marvel-selectLang'], className)}>
           <FlagFilled />
           <span>Language</span>
           <CaretDownOutlined />
         </div>
       </Dropdown>
-    )
+    );
   }
 }
 

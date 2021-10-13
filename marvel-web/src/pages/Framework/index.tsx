@@ -1,9 +1,6 @@
 import React from 'react';
 import { Col, Layout, Space, Row } from 'antd';
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined
-} from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import LoggedInUserInfo from './LoginUserInfo';
 import SystemLogo from './SystemLogo';
 import SiderMenu from './SiderMenu';

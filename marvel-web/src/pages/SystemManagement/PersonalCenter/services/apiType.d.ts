@@ -27,7 +27,7 @@ export type UserInfo = {
   telephone: string;
   /** 数据更新时间 */
   modifyTime: number;
-}
+};
 
 /**
  * 修改用户密码
@@ -37,4 +37,4 @@ export type ModifyPassword = {
   oldPassword: string;
   /** 新密码 */
   newPassword: string;
-}
+};

@@ -8,7 +8,7 @@ export type Pagination = {
   total: number;
   pageSize: number;
   current: number;
-}
+};
 
 export type Department = {
   key?: string;

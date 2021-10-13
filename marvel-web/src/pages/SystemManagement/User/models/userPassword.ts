@@ -5,7 +5,7 @@ import { forceModifyPassword } from '../services/services';
 export type UserPasswordModelState = {
   user: User;
   visible: boolean;
-}
+};
 
 export type UserPasswordModelType = {
   namespace: 'userPassword';
@@ -16,13 +16,13 @@ export type UserPasswordModelType = {
   reducers: {
     save: Reducer<UserPasswordModelState>;
   };
-}
+};
 
 const UserPasswordModel: UserPasswordModelType = {
   namespace: 'userPassword',
   state: {
     user: null,
-    visible: false
+    visible: false,
   },
   effects: {
     *submit({ callback, payload }, { call }) {
@@ -30,19 +30,19 @@ const UserPasswordModel: UserPasswordModelType = {
       if (_.isFunction(callback)) {
         callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): UserPasswordModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default UserPasswordModel;

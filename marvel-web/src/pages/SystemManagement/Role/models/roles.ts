@@ -7,8 +7,7 @@ export type RolesModelState = {
   selectedRowKeys: string[];
   searchKey?: string;
   searchValue?: string;
-}
-
+};
 
 export type RolesModelType = {
   namespace: 'roles';
@@ -21,29 +20,29 @@ export type RolesModelType = {
   reducers: {
     save: Reducer<RolesModelState>;
   };
-}
+};
 
 function formatData(roles: Role[]): Role[] {
   if (!_.isArray(roles)) {
-    return []
+    return [];
   }
-  return _.map<Role, Role>(roles, item => ({
+  return _.map<Role, Role>(roles, (item) => ({
     ...item,
     key: item.id,
-    title: item.name
-  }))
+    title: item.name,
+  }));
 }
 
 function convertToTree(roles: Role[]): Role[] {
   if (!_.isArray(roles)) {
-    return []
+    return [];
   }
   const tmpMap = new Map<string, Role>();
   const result: Role[] = [];
-  _.forEach<Role>(roles, role => {
+  _.forEach<Role>(roles, (role) => {
     tmpMap.set(role.id, role);
   });
-  _.forEach<Role>(roles, role => {
+  _.forEach<Role>(roles, (role) => {
     const node = tmpMap.get(role.parentId);
     if (node && role.id !== role.parentId) {
       if (!_.isArray(node.children)) {
@@ -63,11 +62,11 @@ const RolesModel: RolesModelType = {
     list: [],
     selectedRowKeys: [],
     searchKey: 'name',
-    searchValue: ''
+    searchValue: '',
   },
   effects: {
     *fetch(__, { call, put, select }) {
-      const state: RolesModelState = yield select(states => states.roles);
+      const state: RolesModelState = yield select((states) => states.roles);
       const { searchKey, searchValue } = state;
       const payload = {};
       if (_.isString(searchKey) && !_.isEmpty(searchKey)) {
@@ -78,10 +77,10 @@ const RolesModel: RolesModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         roles = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: convertToTree(formatData(roles)) }
-      })
+        payload: { list: convertToTree(formatData(roles)) },
+      });
     },
     *edit({ callback, payload }, { call, put }) {
       const { id, isCreate, ...rest } = payload;
@@ -91,9 +90,9 @@ const RolesModel: RolesModelType = {
           payload: {
             entity: { ...rest },
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
         const response: HttpResponse<Role> = yield call(getRole, id);
         if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
@@ -103,8 +102,8 @@ const RolesModel: RolesModelType = {
             payload: {
               entity: role,
               type: 'update',
-              visible: true
-            }
+              visible: true,
+            },
           });
         } else if (_.isFunction(callback)) {
           callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
@@ -112,29 +111,29 @@ const RolesModel: RolesModelType = {
       }
     },
     *delete(__, { call, select, put }) {
-      const state: RolesModelState = yield select(states => states.roles);
+      const state: RolesModelState = yield select((states) => states.roles);
       const { selectedRowKeys } = state;
       if (_.isArray(selectedRowKeys) && !_.isEmpty(selectedRowKeys)) {
         const response = yield call(deleteRoles, selectedRowKeys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'roles/fetch'
-          })
+            type: 'roles/fetch',
+          });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): RolesModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default RolesModel;

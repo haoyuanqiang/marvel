@@ -17,13 +17,12 @@ export type Menu = {
   parentId: string;
   modifyTime: number;
   children?: Menu[];
-}
+};
 
 export type MenusModelState = {
   list: Menu[];
   selectedKeys: string[];
-}
-
+};
 
 export type MenusModelType = {
   namespace: 'menuTree';
@@ -36,18 +35,18 @@ export type MenusModelType = {
   reducers: {
     save: Reducer<MenusModelState>;
   };
-}
+};
 
 function formatData(menus: Menu[]): Menu[] {
   if (!_.isArray(menus)) {
-    return []
+    return [];
   }
-  return _.map<Menu, Menu>(menus, item => ({
+  return _.map<Menu, Menu>(menus, (item) => ({
     ..._.omit(item, ['icon']),
     key: item.id,
     title: item.name,
-    isLeaf: item.type !== 1
-  }))
+    isLeaf: item.type !== 1,
+  }));
 }
 
 function convertToTree(menus: Menu[]): Menu[] {
@@ -56,10 +55,10 @@ function convertToTree(menus: Menu[]): Menu[] {
   }
   const tmpMap = new Map<string, Menu>();
   const result: Menu[] = [];
-  _.forEach<Menu>(menus, menu => {
+  _.forEach<Menu>(menus, (menu) => {
     tmpMap.set(menu.id, menu);
   });
-  _.forEach<Menu>(menus, menu => {
+  _.forEach<Menu>(menus, (menu) => {
     const node = tmpMap.get(menu.parentId);
     if (node && menu.id !== menu.parentId) {
       if (!_.isArray(node.children)) {
@@ -77,7 +76,7 @@ const MenusModel: MenusModelType = {
   namespace: 'menuManagement',
   state: {
     list: [],
-    selectedKeys: []
+    selectedKeys: [],
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -86,10 +85,10 @@ const MenusModel: MenusModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         menus = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: convertToTree(formatData(menus)) }
-      })
+        payload: { list: convertToTree(formatData(menus)) },
+      });
     },
     *edit({ callback, payload }, { call, put }) {
       const { id, isCreate, ...rest } = payload;
@@ -99,9 +98,9 @@ const MenusModel: MenusModelType = {
           payload: {
             entity: { ...rest },
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
         const response: HttpResponse<Menu> = yield call(getMenu, id);
         if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
@@ -111,8 +110,8 @@ const MenusModel: MenusModelType = {
             payload: {
               entity: menu,
               type: 'update',
-              visible: true
-            }
+              visible: true,
+            },
           });
         } else if (_.isFunction(callback)) {
           callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
@@ -120,32 +119,32 @@ const MenusModel: MenusModelType = {
       }
     },
     *delete(__, { call, select, put }) {
-      const state: MenusModelState = yield select(states => states.menuManagement);
+      const state: MenusModelState = yield select((states) => states.menuManagement);
       const { selectedKeys } = state;
       if (_.isArray(selectedKeys) && !_.isEmpty(selectedKeys)) {
         const response = yield call(deleteMenus, selectedKeys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'menuManagement/fetch'
-          })
+            type: 'menuManagement/fetch',
+          });
           if (window.parent) {
             window.parent.postMessage({ key: 'refreshMenus' });
           }
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): MenusModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default MenusModel;

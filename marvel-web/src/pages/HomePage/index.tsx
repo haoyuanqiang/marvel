@@ -30,5 +30,5 @@ export default (): React.ReactNode => {
         </Carousel>
       </Card>
     </>
-  )
+  );
 };

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Col, Form, Input, InputNumber, Modal, Radio, Row, TreeSelect } from 'antd';
+import { Col, Form, Input, InputNumber, Modal, Radio, Row } from 'antd';
 import type { FormInstance } from 'antd';
 import { connect } from 'umi';
 import type { Dispatch } from 'umi';
 import { CodeSandboxOutlined } from '@ant-design/icons';
 import type { ConnectState, Role } from './models/connect';
-
 
 type RoleEditorProps = {
   dispatch: Dispatch;
@@ -13,20 +12,20 @@ type RoleEditorProps = {
   roles: Role[];
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 type RoleEditorState = {
   formFields: any;
   timestamp: number;
-}
+};
 
 class RoleEditor extends React.PureComponent<RoleEditorProps> {
   formRef = React.createRef<FormInstance>();
 
   state: RoleEditorState = {
     formFields: {},
-    timestamp: 0
-  }
+    timestamp: 0,
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data, timestamp } = nextProps;
@@ -43,8 +42,8 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
       }
       return {
         formFields: data,
-        timestamp
-      }
+        timestamp,
+      };
     }
     return null;
   }
@@ -52,10 +51,10 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `DP_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `DP_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -73,15 +72,15 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
           if (code === 0) {
             this.onCancel();
           }
-        }
-      })
+        },
+      });
     }
-  }
+  };
 
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'roleEditor/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'roleEditor/save', payload: { visible: false } });
+  };
 
   render() {
     const { type, visible } = this.props;
@@ -106,8 +105,8 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
             <Col span={12}>
               <Form.Item
                 label="角色编码"
-                labelCol={{ span: 8}}
-                wrapperCol={{ span: 16}}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
                 name="code"
                 rules={[{ required: true }, { type: 'string', max: 127 }]}
               >
@@ -117,8 +116,8 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
             <Col span={12}>
               <Form.Item
                 label="角色名称"
-                labelCol={{ span: 8}}
-                wrapperCol={{ span: 16}}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
                 name="name"
                 rules={[{ required: true }, { type: 'string', max: 127 }]}
               >
@@ -129,13 +128,10 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
             <Col span={12}>
               <Form.Item
                 label="显示排序"
-                labelCol={{ span: 8}}
-                wrapperCol={{ span: 16}}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
                 name="sortNumber"
-                rules={[
-                  { required: true },
-                  { type: 'integer', message: '显示排序必须为整数' }
-                ]}
+                rules={[{ required: true }, { type: 'integer', message: '显示排序必须为整数' }]}
               >
                 <InputNumber style={{ width: '100%' }} />
               </Form.Item>
@@ -143,8 +139,8 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
             <Col span={12}>
               <Form.Item
                 label="角色状态"
-                labelCol={{ span: 8}}
-                wrapperCol={{ span: 16}}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
                 name="status"
                 rules={[{ required: true }]}
               >
@@ -157,8 +153,8 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
 
             <Col span={24}>
               <Form.Item
-                labelCol={{ span: 4}}
-                wrapperCol={{ span: 20}}
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 20 }}
                 label="备注"
                 name="remarks"
               >
@@ -168,7 +164,7 @@ class RoleEditor extends React.PureComponent<RoleEditorProps> {
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -178,5 +174,5 @@ export default connect(({ roleEditor, roles, loading }: ConnectState) => ({
   roles: roles.list,
   timestamp: roleEditor.timestamp,
   type: roleEditor.type,
-  visible: roleEditor.visible
+  visible: roleEditor.visible,
 }))(RoleEditor);

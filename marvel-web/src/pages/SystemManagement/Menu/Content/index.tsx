@@ -35,18 +35,13 @@ function findMenuItem(menus: MenuItem[], key: string | undefined): MenuItem | nu
 }
 
 const EmptyStatus: React.FC = (): React.ReactNode => {
-  return (
-    <Empty 
-      className={styles['marvel-empty-status']}
-      description={false}
-    />
-  )
-}
+  return <Empty className={styles['marvel-empty-status']} description={false} />;
+};
 
 class MenuItemEditor extends React.PureComponent<MenuInfoProps> {
   state: MenuInfoState = {
-    menu: null
-  }
+    menu: null,
+  };
 
   static getDerivedStateFromProps(nextProps: MenuInfoProps) {
     const nextState: MenuInfoState = { menu: null };
@@ -64,14 +59,14 @@ class MenuItemEditor extends React.PureComponent<MenuInfoProps> {
     const { menu } = this.state;
     if (!_.isObject(menu)) {
       // null
-      return <EmptyStatus />
+      return <EmptyStatus />;
     }
     // page
     return (
       <>
         <MenuItemInfo menu={menu} />
-        <Divider style={{ borderColor: 'transparent',  margin: '8px 0 0' }} />
-        { menu.type === 2 && <PermissionList menu={menu} />}
+        <Divider style={{ borderColor: 'transparent', margin: '8px 0 0' }} />
+        {menu.type === 2 && <PermissionList menu={menu} />}
       </>
     );
   }
@@ -79,5 +74,5 @@ class MenuItemEditor extends React.PureComponent<MenuInfoProps> {
 
 export default connect(({ menuManagement }: ConnectState) => ({
   menus: menuManagement.list,
-  selectedKeys: menuManagement.selectedKeys
+  selectedKeys: menuManagement.selectedKeys,
 }))(MenuItemEditor);

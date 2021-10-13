@@ -11,28 +11,25 @@ const { Content } = Layout;
 const UserLoginLayout: React.FC = () => (
   <Layout className={styles['marvel-login-layout']}>
     <Content className={styles['marvel-login-background']}>
-      <Card
-        className={styles['marvel-loginbox']}
-        bodyStyle={{ padding: 0 }}
-        bordered={false}
-      >
+      <Card className={styles['marvel-loginbox']} bodyStyle={{ padding: 0 }} bordered={false}>
         <div className={styles['marvel-loginbox-title']}>
           <SelectLanguage className={styles['marvel-login-title-selectLang']} />
           <div
-            className={
-              classNames(styles['marvel-login-title-effects'], styles['marvel-login-title-content'])
-            }
+            className={classNames(
+              styles['marvel-login-title-effects'],
+              styles['marvel-login-title-content'],
+            )}
           >
             <Space direction="horizontal">
               <CodeSandboxOutlined />
               Marvel
             </Space>
-            
           </div>
           <div
-            className={
-              classNames(styles['marvel-login-title-effects'], styles['marvel-login-title-desc'])
-            }
+            className={classNames(
+              styles['marvel-login-title-effects'],
+              styles['marvel-login-title-desc'],
+            )}
           >
             —— Marvel后台管理系统
           </div>
@@ -48,6 +45,6 @@ const UserLoginLayout: React.FC = () => (
       </div>
     </Content>
   </Layout>
-)
+);
 
 export default UserLoginLayout;

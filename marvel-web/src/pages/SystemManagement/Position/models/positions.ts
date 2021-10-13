@@ -12,14 +12,12 @@ export type Position = {
   parentId: string;
   modifyTime?: number;
   children?: Position[];
-}
-
+};
 
 export type PositionsModelState = {
   list: Position[];
   selectedRowKeys: string[];
-}
-
+};
 
 export type DeaprtmentsModelType = {
   namespace: 'positions';
@@ -33,29 +31,29 @@ export type DeaprtmentsModelType = {
   reducers: {
     save: Reducer<PositionsModelState>;
   };
-}
+};
 
 function formatData(positions: Position[]): Position[] {
   if (!_.isArray(positions)) {
-    return []
+    return [];
   }
-  return _.map<Position, Position>(positions, item => ({
+  return _.map<Position, Position>(positions, (item) => ({
     ...item,
     key: item.id,
-    title: item.name
-  }))
+    title: item.name,
+  }));
 }
 
 function convertToTree(positions: Position[]): Position[] {
   if (!_.isArray(positions)) {
-    return []
+    return [];
   }
   const tmpMap = new Map<string, Position>();
   const result: Position[] = [];
-  _.forEach<Position>(positions, position => {
+  _.forEach<Position>(positions, (position) => {
     tmpMap.set(position.id, position);
   });
-  _.forEach<Position>(positions, position => {
+  _.forEach<Position>(positions, (position) => {
     const node = tmpMap.get(position.parentId);
     if (node && position.id !== position.parentId) {
       if (!_.isArray(node.children)) {
@@ -73,7 +71,7 @@ const PositionsModel: DeaprtmentsModelType = {
   namespace: 'positions',
   state: {
     list: [],
-    selectedRowKeys: []
+    selectedRowKeys: [],
   },
   effects: {
     *fetch(__, { call, put }) {
@@ -82,10 +80,10 @@ const PositionsModel: DeaprtmentsModelType = {
       if (_.isObject(response) && response.code === 0 && _.isArray(response.result)) {
         positions = response.result;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: convertToTree(formatData(positions)) }
-      })
+        payload: { list: convertToTree(formatData(positions)) },
+      });
     },
     *edit({ callback, payload }, { call, put }) {
       const { id, isCreate, ...rest } = payload;
@@ -95,9 +93,9 @@ const PositionsModel: DeaprtmentsModelType = {
           payload: {
             entity: { ...rest },
             type: 'create',
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       } else {
         const response: HttpResponse<Position> = yield call(getPosition, id);
         if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
@@ -107,8 +105,8 @@ const PositionsModel: DeaprtmentsModelType = {
             payload: {
               entity: position,
               type: 'update',
-              visible: true
-            }
+              visible: true,
+            },
           });
         } else if (_.isFunction(callback)) {
           callback(_.get(response, 'code', -1), _.get(response, 'message', ''));
@@ -116,14 +114,14 @@ const PositionsModel: DeaprtmentsModelType = {
       }
     },
     *delete(__, { call, select, put }) {
-      const state: PositionsModelState = yield select(states => states.positions);
+      const state: PositionsModelState = yield select((states) => states.positions);
       const { selectedRowKeys } = state;
       if (_.isArray(selectedRowKeys) && !_.isEmpty(selectedRowKeys)) {
         const response = yield call(deletePositions, selectedRowKeys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'positions/fetch'
-          })
+            type: 'positions/fetch',
+          });
         }
       }
     },
@@ -133,23 +131,23 @@ const PositionsModel: DeaprtmentsModelType = {
         const response = yield call(deletePositions, keys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'positions/fetch'
+            type: 'positions/fetch',
           });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): PositionsModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default PositionsModel;

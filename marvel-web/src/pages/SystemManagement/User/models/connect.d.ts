@@ -10,7 +10,7 @@ export {
   Pagination,
   User,
   UsersModelState,
-  UserEditorModelState
+  UserEditorModelState,
 };
 
 export interface Loading {

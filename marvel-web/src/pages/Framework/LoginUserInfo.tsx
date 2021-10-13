@@ -8,23 +8,22 @@ import type { ConnectState } from './models/connect';
 type LoggedInUserInfoProps = {
   dispatch: Dispatch;
   name: string;
-}
+};
 
 class LoggedInUserInfo extends React.PureComponent<LoggedInUserInfoProps> {
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'loginUser/fetch'
-    })
+      type: 'loginUser/fetch',
+    });
   }
 
   logout = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'userLogin/logout'
-    })
-  }
+      type: 'userLogin/logout',
+    });
+  };
 
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
@@ -37,11 +36,11 @@ class LoggedInUserInfo extends React.PureComponent<LoggedInUserInfoProps> {
           id: 'personal-center',
           name: '个人中心',
           locale: 'system.personal-center',
-          path: '/module/personal-center'
-        }
-      })
+          path: '/module/personal-center',
+        },
+      });
     }
-  }
+  };
 
   renderDropdownMenu = () => {
     return (
@@ -49,24 +48,24 @@ class LoggedInUserInfo extends React.PureComponent<LoggedInUserInfoProps> {
         <Menu.Item key="personalCenter" icon={<UserOutlined />}>
           个人中心
         </Menu.Item>
-        <Divider style={{ margin: '4px 0'}} />
+        <Divider style={{ margin: '4px 0' }} />
         <Menu.Item key="logout" icon={<LogoutOutlined />}>
           退出登录
         </Menu.Item>
       </Menu>
-    )
-  }
+    );
+  };
 
   render() {
     return (
       <Dropdown overlay={this.renderDropdownMenu}>
         <Avatar icon={<UserOutlined />} size={44} shape="square" />
       </Dropdown>
-    )
+    );
   }
 }
 
-export default connect(({ loading, loginUser }: ConnectState ) => ({
+export default connect(({ loading, loginUser }: ConnectState) => ({
   loading: loading.effects['loginUser/fetch'],
-  name: loginUser.nickname || loginUser.name || loginUser.loginName
+  name: loginUser.nickname || loginUser.name || loginUser.loginName,
 }))(LoggedInUserInfo);

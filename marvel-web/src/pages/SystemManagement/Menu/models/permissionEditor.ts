@@ -10,7 +10,7 @@ export type PermissionEditorModelState = {
   timestamp: number;
   type: 'create' | 'update';
   visible: boolean;
-}
+};
 
 export type PermissionEditorModelType = {
   namespace: 'permissionEditor';
@@ -21,7 +21,7 @@ export type PermissionEditorModelType = {
   reducers: {
     save: Reducer<PermissionEditorModelState>;
   };
-}
+};
 
 const PermissionEditor: PermissionEditorModelType = {
   namespace: 'permissionEditor',
@@ -30,12 +30,12 @@ const PermissionEditor: PermissionEditorModelType = {
     permission: null,
     timestamp: 0,
     type: 'create',
-    visible: false
+    visible: false,
   },
   effects: {
     *initialize({ payload }, { call, put, select }) {
       const { isCreate } = payload;
-      const state = yield select(states => states.menuManagement);
+      const state = yield select((states) => states.menuManagement);
       const { selectedKeys } = state;
       if (_.isArray(selectedKeys) && !_.isEmpty(selectedKeys)) {
         const menuId = selectedKeys[0];
@@ -47,9 +47,9 @@ const PermissionEditor: PermissionEditorModelType = {
               permission: {},
               timestamp: Date.now(),
               type: 'create',
-              visible: true
-            }
-          })
+              visible: true,
+            },
+          });
         } else {
           const { id } = payload;
           if (!_.isEmpty(id)) {
@@ -62,35 +62,38 @@ const PermissionEditor: PermissionEditorModelType = {
                   permission: response.result,
                   timestamp: Date.now(),
                   type: 'update',
-                  visible: true
-                }
-              })
+                  visible: true,
+                },
+              });
             }
           }
         }
       }
     },
     *submit({ payload }, { call, put, select }) {
-      const state = yield select(states => states.permissionEditor);
+      const state = yield select((states) => states.permissionEditor);
       const { type, menuId } = state;
-      const response: HttpResponse<string> = yield call(type === 'create' ? createPermission : updatePermission, payload);
+      const response: HttpResponse<string> = yield call(
+        type === 'create' ? createPermission : updatePermission,
+        payload,
+      );
       if (_.isObject(response) && response.code === 0) {
-        yield put({ type: 'save', payload: { visible: false }});
+        yield put({ type: 'save', payload: { visible: false } });
         yield put({ type: 'permissions/fetch', payload: menuId });
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): PermissionEditorModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default PermissionEditor;

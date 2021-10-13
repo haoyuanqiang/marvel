@@ -7,4 +7,4 @@ export type Department = {
   parentId: string;
   modifyTime?: number;
   children?: Department[];
-}
+};

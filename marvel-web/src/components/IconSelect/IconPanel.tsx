@@ -9,14 +9,14 @@ const allIcons: Record<string, any> = AntdIcons;
 type IconPanelProps = {
   value: string;
   onSelect: (value: string) => void;
-}
+};
 
 type IconPanelState = {
   currentTheme: 'Outlined' | 'Filled' | 'TwoTone';
   icons: Record<string, string[]>;
   loading: boolean;
   value?: string;
-}
+};
 
 function getThemeFormIconName(icon: string): string {
   if (_.isString(icon)) {
@@ -32,7 +32,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
     icons: {},
     loading: true,
     value: '',
-  }
+  };
 
   // static getDerivedStateFromProps(nextProps: IconPanelProps, prevState: IconPanelState) {
   //   const nextState: IconPanelState = {};
@@ -57,7 +57,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
     { label: '线框风格', value: 'Outlined' },
     { label: '实底风格', value: 'Filled' },
     { label: '双色风格', value: 'TwoTone' },
-  ]
+  ];
 
   componentDidMount() {
     const nextState: IconPanelState = {};
@@ -70,10 +70,12 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
     this.setState(nextState);
     setTimeout(() => {
       const icons = {};
-      const iconNames: string[] = Object.keys(allIcons).filter(iconName => iconName[0] >= 'A' && iconName[0] <= 'Z');
-      icons.Outlined = iconNames.filter(iconName => iconName.includes('Outlined'));
-      icons.Filled = iconNames.filter(iconName => iconName.includes('Filled'));
-      icons.TwoTone = iconNames.filter(iconName => iconName.includes('TwoTone'));
+      const iconNames: string[] = Object.keys(allIcons).filter(
+        (iconName) => iconName[0] >= 'A' && iconName[0] <= 'Z',
+      );
+      icons.Outlined = iconNames.filter((iconName) => iconName.includes('Outlined'));
+      icons.Filled = iconNames.filter((iconName) => iconName.includes('Filled'));
+      icons.TwoTone = iconNames.filter((iconName) => iconName.includes('TwoTone'));
       this.setState({ icons, loading: false });
     }, 100);
   }
@@ -81,7 +83,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
   handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value as ThemeType;
     this.setState({ currentTheme: value });
-  }
+  };
 
   onClick = (event) => {
     const { onSelect } = this.props;
@@ -89,7 +91,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
       const { name } = event.currentTarget;
       onSelect(name);
     }
-  }
+  };
 
   render() {
     const { currentTheme, icons, loading } = this.state;
@@ -99,7 +101,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
         <Spin>
           <div className={styles['marvel-icons-container']} />
         </Spin>
-      )
+      );
     }
     const visibleIconList = icons[currentTheme];
     return (
@@ -115,8 +117,8 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
           />
         </div>
         <div className={styles['marvel-icons-list']}>
-          {
-            visibleIconList && visibleIconList.map(iconName => {
+          {visibleIconList &&
+            visibleIconList.map((iconName) => {
               const Component = allIcons[iconName];
               return (
                 <div className={styles['marvel-icons-list-item']} key={iconName}>
@@ -124,7 +126,7 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
                     <Button
                       name={iconName}
                       className={classNames(styles['marvel-icons-list-item-icon'], {
-                        [styles['marvel-icons-list-item-icon-selected']]: value === iconName
+                        [styles['marvel-icons-list-item-icon-selected']]: value === iconName,
                       })}
                       icon={<Component />}
                       size="large"
@@ -133,10 +135,8 @@ class IconPanel extends React.PureComponent<IconPanelProps, IconPanelState> {
                   </Tooltip>
                 </div>
               );
-            })
-          }
+            })}
         </div>
-        
       </div>
     );
   }

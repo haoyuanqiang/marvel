@@ -7,4 +7,4 @@ export type Position = {
   parentId: string;
   modifyTime?: number;
   children?: Position[];
-}
+};

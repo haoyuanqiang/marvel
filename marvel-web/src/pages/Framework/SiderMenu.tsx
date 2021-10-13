@@ -9,14 +9,9 @@ import type { ConnectState, Menu as MenuType } from './models/connect';
 type SiderMenuProps = {
   dispatch: Dispatch;
   menus: MenuType[];
-}
+};
 
-type SiderMenuState = {
-
-}
-
-class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
-  state = {}
+class SiderMenu extends React.PureComponent<SiderMenuProps> {
 
   componentDidMount() {
     this.fetchMenus();
@@ -32,14 +27,14 @@ class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
     if (data.key === 'refreshMenus') {
       this.fetchMenus();
     }
-  }
+  };
 
   fetchMenus = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'frameworkMenus/fetch'
-    })
-  }
+      type: 'frameworkMenus/fetch',
+    });
+  };
 
   onMenuClick = ({ keyPath }: MenuInfo) => {
     const { dispatch, menus } = this.props;
@@ -47,9 +42,9 @@ class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
       let menu: MenuType = null;
       for (let i = keyPath.length - 1; i >= 0; i -= 1) {
         if (_.isNull(menu)) {
-          menu = menus.find(item => item.id === keyPath[i]);
+          menu = menus.find((item) => item.id === keyPath[i]);
         } else if (_.isArray(menu?.children)) {
-          menu = menu.children.find(item => item.id === keyPath[i]);
+          menu = menu.children.find((item) => item.id === keyPath[i]);
         }
         if (!_.isObject(menu)) {
           break;
@@ -62,7 +57,7 @@ class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
         });
       }
     }
-  }
+  };
 
   renderMenu = (menu: MenuType) => {
     if (!_.isObject(menu)) {
@@ -70,7 +65,7 @@ class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
     }
     let children = null;
     if (_.isArray(menu.children)) {
-      children = _.map(menu.children, item => this.renderMenu(item)).filter(v => !!v);
+      children = _.map(menu.children, (item) => this.renderMenu(item)).filter((v) => !!v);
     }
     const IconComponent = AntdIcons[menu.iconName] || AntdIcons.BorderOutlined;
     const isValidIcon = !!AntdIcons[menu.iconName];
@@ -93,18 +88,18 @@ class SiderMenu extends React.PureComponent<SiderMenuProps, SiderMenuState> {
         {menu.name}
       </Menu.Item>
     );
-  }
+  };
 
   render() {
     const { menus } = this.props;
     return (
       <Menu theme="dark" mode="inline" onClick={this.onMenuClick}>
-        {!_.isArray(menus) ? null : _.map(menus, menu => this.renderMenu(menu))}
+        {!_.isArray(menus) ? null : _.map(menus, (menu) => this.renderMenu(menu))}
       </Menu>
-    )
+    );
   }
 }
 
 export default connect(({ frameworkMenus }: ConnectState) => ({
-  menus: frameworkMenus.list
+  menus: frameworkMenus.list,
 }))(SiderMenu);

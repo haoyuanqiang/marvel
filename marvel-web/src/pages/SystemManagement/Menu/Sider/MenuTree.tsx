@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect, FormattedMessage } from 'umi';
+import { connect } from 'umi';
 import type { Dispatch } from 'umi';
 import { Spin, Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
-import * as AntdIcon from '@ant-design/icons';
 import type { Menu } from '../models/connect';
 import type { ConnectState } from '../models/connect';
 import styles from '../style.less';
@@ -20,11 +19,10 @@ interface MenuTreeState {
   tree?: DataNode[];
 }
 
-
 class MenuTree extends React.PureComponent<MenuTreeProps, MenuTreeState> {
   state: MenuTreeState = {
-    tree: []
-  }
+    tree: [],
+  };
 
   static getDerivedStateFromProps(nextProps: MenuTreeProps, prevState: MenuTreeState) {
     const nextState: MenuTreeState = {};
@@ -41,29 +39,29 @@ class MenuTree extends React.PureComponent<MenuTreeProps, MenuTreeState> {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'menuManagement/fetch' })
+    dispatch({ type: 'menuManagement/fetch' });
   }
 
   onSelect = (selectedKeys: (string | number)[]) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'menuManagement/save',
-      payload: { selectedKeys: [...selectedKeys] }
-    })
+      payload: { selectedKeys: [...selectedKeys] },
+    });
     if (!_.isEmpty(selectedKeys)) {
       dispatch({
         type: 'permissions/change',
         payload: {
-          menuId: selectedKeys[0]
-        }
-      })
+          menuId: selectedKeys[0],
+        },
+      });
     }
-  }
+  };
 
   render(): React.ReactNode {
     const { loading, selectedKeys } = this.props;
     if (loading) {
-      return <Spin style={{ padding: 30, width: '100%' }} />
+      return <Spin style={{ padding: 30, width: '100%' }} />;
     }
     const { tree } = this.state;
     return (
@@ -76,12 +74,12 @@ class MenuTree extends React.PureComponent<MenuTreeProps, MenuTreeState> {
         treeData={tree}
         onSelect={this.onSelect}
       />
-    )
+    );
   }
 }
 
 export default connect(({ menuManagement, loading }: ConnectState) => ({
   menus: menuManagement.list,
   selectedKeys: menuManagement.selectedKeys,
-  loading: loading.effects['menuManagement/fetch']
+  loading: loading.effects['menuManagement/fetch'],
 }))(MenuTree);

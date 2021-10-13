@@ -5,18 +5,17 @@ import { connect } from 'umi';
 import type { Dispatch } from 'umi';
 import type { ConnectState, User } from '../models/connect';
 
-
 type UserEditorProps = {
   dispatch: Dispatch;
   visible: boolean;
   user: User;
-}
+};
 
 type UserEditorState = {
   passwordFirst: string;
   passwordSecond: string;
   isPlaintext: boolean;
-}
+};
 
 class UserEditor extends React.PureComponent<UserEditorProps> {
   formRef = React.createRef<FormInstance>();
@@ -24,16 +23,16 @@ class UserEditor extends React.PureComponent<UserEditorProps> {
   state: UserEditorState = {
     passwordFirst: '',
     passwordSecond: '',
-    isPlaintext: false
-  }
+    isPlaintext: false,
+  };
 
   generateCode = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({
-        code: `UU_${Date.now().toString(36).toUpperCase()}`
-      })
+        code: `UU_${Date.now().toString(36).toUpperCase()}`,
+      });
     }
-  }
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -46,30 +45,29 @@ class UserEditor extends React.PureComponent<UserEditorProps> {
           type: `userPassword/submit`,
           payload: {
             userId,
-            password
+            password,
           },
           callback: (code) => {
             if (code === 0) {
               this.onCancel();
             }
-          }
-        })
+          },
+        });
       } else {
         this.onCancel();
       }
-      
     }
-  }
+  };
 
   onCancel = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'userPassword/save', payload: { visible: false } })
-  }
+    dispatch({ type: 'userPassword/save', payload: { visible: false } });
+  };
 
   onPasswordFirstChange = (event) => {
     const { value } = event.target;
     this.setState({ passwordFirst: value });
-  }
+  };
 
   render() {
     const { user, visible } = this.props;
@@ -144,11 +142,11 @@ class UserEditor extends React.PureComponent<UserEditorProps> {
           </Form.Item>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
 export default connect(({ userPassword }: ConnectState) => ({
   user: userPassword.user,
-  visible: userPassword.visible
+  visible: userPassword.visible,
 }))(UserEditor);

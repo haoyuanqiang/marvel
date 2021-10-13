@@ -18,6 +18,6 @@ const MenuTreeEditor: React.FC = (): React.ReactNode => (
     </div>
     <MenuEditor />
   </>
-)
+);
 
 export default MenuTreeEditor;

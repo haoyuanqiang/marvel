@@ -7,38 +7,38 @@ export async function getDepartments(): Promise<any> {
 
 export async function getUsers(payload: any): Promise<any> {
   return request.get('/api/marvel-admin/users', {
-    params: payload
+    params: payload,
   });
 }
 
 export async function getUser(payload: string): Promise<any> {
   return request.get('/api/marvel-admin/user', {
     params: {
-      id: payload
-    }
-  })
+      id: payload,
+    },
+  });
 }
 
 export async function createUser(payload: User): Promise<any> {
   return request.post('/api/marvel-admin/user', {
-    data: payload
+    data: payload,
   });
 }
 
 export async function updateUser(payload: User): Promise<any> {
   return request.put('/api/marvel-admin/user', {
-    data: payload
+    data: payload,
   });
 }
 
 export async function deleteUsers(payload: string[]): Promise<any> {
   return request.put('/api/marvel-admin/users/invalidation', {
-    data: payload
+    data: payload,
   });
 }
 
 export async function forceModifyPassword(payload: any) {
   return request.post('/api/marvel-admin/user/password', {
-    data: payload
+    data: payload,
   });
 }

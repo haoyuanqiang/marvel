@@ -1,13 +1,7 @@
-import type {
-  Position,
-  PositionsModelState
-} from './positions';
+import type { Position, PositionsModelState } from './positions';
 import type { PositionEditorModelState } from './positionEditor';
 
-export {
-  Position,
-  PositionModelState
-};
+export { Position, PositionModelState };
 
 export interface Loading {
   global: boolean;

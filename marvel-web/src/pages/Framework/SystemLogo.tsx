@@ -5,7 +5,7 @@ import styles from './style.less';
 
 type SystemLogoProps = {
   collapsed?: boolean;
-}
+};
 
 const SystemLogo: React.FC<SystemLogoProps> = (props: SystemLogoProps) => {
   const { collapsed } = props;
@@ -16,14 +16,14 @@ const SystemLogo: React.FC<SystemLogoProps> = (props: SystemLogoProps) => {
         style={{
           margin: 'auto',
           padding: !collapsed ? '0 24px' : undefined,
-          width: !collapsed ? '100%' : undefined
+          width: !collapsed ? '100%' : undefined,
         }}
       >
         <CodeSandboxOutlined />
         {!collapsed ? 'Marvel' : null}
       </Space>
     </div>
-  )
-}
+  );
+};
 
 export default SystemLogo;

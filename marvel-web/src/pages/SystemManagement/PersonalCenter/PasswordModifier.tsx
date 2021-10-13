@@ -9,20 +9,20 @@ type PasswordModifierProps = {
   dispatch: Dispatch;
   loading: boolean;
   userInfo: UserModelState;
-}
+};
 
 type PasswordModifierState = {
   formFields: any;
   isChanged: boolean;
-}
+};
 
 class PasswordModifier extends React.PureComponent<PasswordModifierProps, PasswordModifierState> {
   formRef = React.createRef<FormInstance>();
 
   state: PasswordModifierState = {
     formFields: {},
-    isChanged: false
-  }
+    isChanged: false,
+  };
 
   onOk = () => {
     if (this.formRef.current && this.formRef.current.validateFields()) {
@@ -32,33 +32,28 @@ class PasswordModifier extends React.PureComponent<PasswordModifierProps, Passwo
         type: `userInfo/updatePassword`,
         payload: {
           oldPassword: fieldsValue.oldPassword,
-          newPassword: fieldsValue.password
+          newPassword: fieldsValue.password,
         },
         callback: (code) => {
           if (code === 0) {
             this.formRef.current.setFieldsValue({ oldPassword: '', password: '', confirm: '' });
           }
-        }
-      })
+        },
+      });
     }
-  }
+  };
 
   onReset = () => {
     if (this.formRef.current) {
       this.formRef.current.setFieldsValue({ oldPassword: '', password: '', confirm: '' });
     }
-  }
+  };
 
   render() {
     return (
       <Row>
         <Col span={12}>
-          <Form 
-            labelCol={{ span: 8 }} 
-            wrapperCol={{ span: 16 }} 
-            size="large" 
-            ref={this.formRef}
-          >
+          <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} size="large" ref={this.formRef}>
             <Form.Item
               name="oldPassword"
               label="旧密码"
@@ -113,16 +108,19 @@ class PasswordModifier extends React.PureComponent<PasswordModifierProps, Passwo
         </Col>
         <Col span={24}>
           <Space>
-            <Button type="primary" onClick={this.onOk}>保存</Button>
-            <Button type="default" onClick={this.onReset}>重置</Button>
-          </Space> 
+            <Button type="primary" onClick={this.onOk}>
+              保存
+            </Button>
+            <Button type="default" onClick={this.onReset}>
+              重置
+            </Button>
+          </Space>
         </Col>
       </Row>
     );
-    
   }
 }
 
 export default connect(({ loading }: ConnectState) => ({
-  loading: loading.effects['userInfo/fetch']
+  loading: loading.effects['userInfo/fetch'],
 }))(PasswordModifier);

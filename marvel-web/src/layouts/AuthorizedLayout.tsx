@@ -7,9 +7,7 @@ const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : Re
 const AuthorizedLayout: React.FC = ({ children }) => {
   return (
     <InspectorWrapper>
-      <Authorized>
-        {children}
-      </Authorized>
+      <Authorized>{children}</Authorized>
     </InspectorWrapper>
   );
 };

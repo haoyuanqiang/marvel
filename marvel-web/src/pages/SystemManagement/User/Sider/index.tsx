@@ -101,31 +101,32 @@ class SiderSearchTree extends React.PureComponent<SiderSearchTreeProps, SiderSea
     });
   };
 
-  onSelect = selectedKeys => {
+  onSelect = (selectedKeys) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'users/changeDepartment',
       payload: {
-        departmentId: !_.isEmpty(selectedKeys) ? selectedKeys[0] : null
-      }
+        departmentId: !_.isEmpty(selectedKeys) ? selectedKeys[0] : null,
+      },
     });
-  }
+  };
 
-  loop = (data) => { 
+  loop = (data) => {
     const { searchValue } = this.state;
     return data.map((item) => {
       const index = item.title.indexOf(searchValue);
       const beforeStr = item.title.substr(0, index);
       const afterStr = item.title.substr(index + searchValue.length);
-      const title = index > -1 ? (
-        <span>
-          {beforeStr}
-          <span style={{ backgroundColor: '#409EFF', color: 'white' }}>{searchValue}</span>
-          {afterStr}
-        </span>
-      ) : (
-        <span>{item.title}</span>
-      );
+      const title =
+        index > -1 ? (
+          <span>
+            {beforeStr}
+            <span style={{ backgroundColor: '#409EFF', color: 'white' }}>{searchValue}</span>
+            {afterStr}
+          </span>
+        ) : (
+          <span>{item.title}</span>
+        );
       if (item.children) {
         return { title, key: item.key, children: this.loop(item.children) };
       }
@@ -134,17 +135,17 @@ class SiderSearchTree extends React.PureComponent<SiderSearchTreeProps, SiderSea
         key: item.key,
       };
     });
-  }
+  };
 
   render() {
     // const { selectedKeys } = this.props;
     const { expandedKeys, autoExpandParent, data } = this.state;
     return (
       <div className={styles['marvel-sider']}>
-        <Search 
-          style={{ marginBottom: 8 }} 
+        <Search
+          style={{ marginBottom: 8 }}
           placeholder="请输入部门名称搜索"
-          onChange={this.onChange} 
+          onChange={this.onChange}
         />
         <Tree
           autoExpandParent={autoExpandParent}

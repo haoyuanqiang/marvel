@@ -1,19 +1,18 @@
-
 export type HttpResponse<T> = {
   code: number;
   message: string;
   result: T;
-}
+};
 
 export type pagination = {
   pageSize: number;
   current: number;
-}
+};
 
 export type RoleRequestParams = pagination & {
   code?: string;
   name?: string;
-}
+};
 
 export type Role = {
   /**
@@ -40,7 +39,7 @@ export type Role = {
    * 更新时间
    */
   modifyTime?: number;
-}
+};
 
 /**
  * 菜单项类型定义
@@ -106,7 +105,7 @@ export type Permission = {
    * 排序
    */
   sortNumber: number;
-}
+};
 
 export type RolePermissions = {
   /**
@@ -123,4 +122,4 @@ export type RolePermissions = {
    * 权限ID列表
    */
   permissionIds: string[];
-}
+};

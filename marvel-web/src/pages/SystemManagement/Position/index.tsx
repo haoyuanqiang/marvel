@@ -12,11 +12,11 @@ const { Content } = Layout;
 type PositionManagementProps = {
   dispatch: Dispatch;
   list: Position[];
-}
+};
 
 type PositionManagementState = {
   name: string;
-}
+};
 
 function findPositions(positions: Position[], positionName: string): Position[] {
   const list: Position[] = [];
@@ -25,20 +25,23 @@ function findPositions(positions: Position[], positionName: string): Position[] 
       list.push(_.cloneDeep(_.omit(position, 'children')));
     }
     if (_.isArray(position.children)) {
-      position.children.forEach(item => {
+      position.children.forEach((item) => {
         traceTree(item);
-      })
+      });
     }
-  }
+  };
   if (_.isArray(positions)) {
-    positions.forEach(item => {
+    positions.forEach((item) => {
       traceTree(item);
     });
   }
   return list;
 }
 
-class PositionManagement extends React.PureComponent<PositionManagementProps, PositionManagementState> {
+class PositionManagement extends React.PureComponent<
+  PositionManagementProps,
+  PositionManagementState
+> {
   columns = [
     {
       dataIndex: 'name',
@@ -60,12 +63,12 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
       render: (value) => {
         if (value === 1) {
           return <Tag color="processing">正常</Tag>;
-        } 
+        }
         if (value === 2) {
           return <Tag color="default">停用</Tag>;
         }
-        return <Tag color="warning">未知</Tag>
-      }
+        return <Tag color="warning">未知</Tag>;
+      },
     },
     {
       dataIndex: 'modifyTime',
@@ -77,7 +80,7 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
           return moment(value).format('YYYY-MM-DD HH:mm:ss');
         }
         return '';
-      }
+      },
     },
     {
       align: 'center',
@@ -87,39 +90,45 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
       render: (value, record) => {
         return (
           <Space size={8}>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onCreate({ parentId: record.id }) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onCreate({ parentId: record.id });
+              }}
             >
               新建
             </Button>
             <Divider type="vertical" style={{ margin: 0 }} />
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => { this.onEdit(record.id) }}
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onEdit(record.id);
+              }}
             >
               修改
             </Button>
             <Divider type="vertical" style={{ margin: 0 }} />
-            <Button 
+            <Button
               danger
-              type="link" 
-              size="small" 
-              onClick={() => { this.onDeleteSingle(record.id) }}
+              type="link"
+              size="small"
+              onClick={() => {
+                this.onDeleteSingle(record.id);
+              }}
             >
               删除
             </Button>
           </Space>
-        )
-      }
-    }
-  ]
+        );
+      },
+    },
+  ];
 
   state: PositionManagementState = {
-    name: ''
-  }
+    name: '',
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -129,43 +138,43 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
   onCreate = (params) => {
     const { dispatch } = this.props;
     dispatch({ type: 'positions/edit', payload: { ...params, isCreate: true } });
-  }
+  };
 
   onEdit = (id) => {
     const { dispatch } = this.props;
     dispatch({ type: 'positions/edit', payload: { isCreate: false, id } });
-  }
+  };
 
   onDeleteSingle = (id) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'positions/deleteSingle',
       payload: {
-        keys: [id]
-      }
-    })
-  }
+        keys: [id],
+      },
+    });
+  };
 
   onDelete = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'positions/delete'
-    })
-  }
+      type: 'positions/delete',
+    });
+  };
 
   onRowSelectionChange = (selectedRowKeys: string[]) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'positions/save',
       payload: {
-        selectedRowKeys
-      }
-    })
-  }
+        selectedRowKeys,
+      },
+    });
+  };
 
   onSearch = (value) => {
     this.setState({ name: value });
-  }
+  };
 
   render() {
     const { list, loading, selectedRowKeys } = this.props;
@@ -179,19 +188,10 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
         <Content style={{ height: '100%', padding: 16 }}>
           <div style={{ marginBottom: 8 }}>
             <Space size="small" direction="horizontal">
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />}
-                onClick={this.onCreate}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={this.onCreate}>
                 新建
               </Button>
-              <Button 
-                danger
-                type="default" 
-                icon={<DeleteOutlined />}
-                onClick={this.onDelete}
-              >
+              <Button danger type="default" icon={<DeleteOutlined />} onClick={this.onDelete}>
                 删除
               </Button>
             </Space>
@@ -205,10 +205,10 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
             dataSource={dataSource}
             pagination={false}
             loading={loading}
-            rowSelection={{ 
+            rowSelection={{
               checkStrictly: false,
               selectedRowKeys,
-              onChange: this.onRowSelectionChange 
+              onChange: this.onRowSelectionChange,
             }}
             scroll={{ y: 'calc(100vh - 95px)' }}
           />
@@ -222,5 +222,5 @@ class PositionManagement extends React.PureComponent<PositionManagementProps, Po
 export default connect(({ positions, loading }: ConnectState) => ({
   loading: loading.effects['positions/fetch'],
   list: positions.list,
-  selectedRowKeys: positions.selectedRowKeys
+  selectedRowKeys: positions.selectedRowKeys,
 }))(PositionManagement);

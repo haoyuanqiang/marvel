@@ -1,8 +1,8 @@
 import React from 'react';
-import type { MenuDataItem} from '@ant-design/pro-layout';
+import type { MenuDataItem } from '@ant-design/pro-layout';
 import { getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import type { ConnectProps} from 'umi';
+import type { ConnectProps } from 'umi';
 import { useIntl, connect } from 'umi';
 import type { ConnectState } from '@/models/connect';
 

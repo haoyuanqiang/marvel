@@ -7,7 +7,7 @@ export type UsersModelState = {
   list: User[];
   pagination: Pagination;
   selectedKeys: string[];
-}
+};
 
 export type UsersModelType = {
   namespace: 'users';
@@ -19,16 +19,16 @@ export type UsersModelType = {
   reducers: {
     save: Reducer<UsersModelState>;
   };
-}
+};
 
 function formatData(users: User[]): User[] {
   if (!_.isArray(users)) {
-    return []
+    return [];
   }
-  return _.map<User, User>(users, item => ({
+  return _.map<User, User>(users, (item) => ({
     ...item,
     key: item.id,
-  }))
+  }));
 }
 
 const UsersModel: UsersModelType = {
@@ -38,69 +38,69 @@ const UsersModel: UsersModelType = {
     pagination: {
       total: 0,
       pageSize: 20,
-      current: 1
+      current: 1,
     },
     departmentId: undefined,
-    selectedKeys: []
+    selectedKeys: [],
   },
   effects: {
     *changeDepartment({ payload }, { put }) {
-      yield put ({
+      yield put({
         type: 'save',
-        payload
+        payload,
       });
-      yield put ({ type: 'fetch', payload: { current: 1, pageSize: 20 } });
+      yield put({ type: 'fetch', payload: { current: 1, pageSize: 20 } });
     },
     *fetch({ payload }, { call, put, select }) {
-      const state: UsersModelState = yield select(states => states.users);
+      const state: UsersModelState = yield select((states) => states.users);
       const response: HttpResponse<User[]> = yield call(getUsers, {
         ...payload,
-        departmentId: state.departmentId || undefined
+        departmentId: state.departmentId || undefined,
       });
       if (_.isObject(response) && response.code === 0 && _.isObject(response.result)) {
         const list = formatData(_.get(response.result, 'list'));
-        yield put ({
+        yield put({
           type: 'save',
           payload: {
             list,
-            pagination: _.get(response.result, 'pagination', { 
-              total: 0, 
-              pageSize: 20, 
-              current: 1 
-            })
-          }
-        })
+            pagination: _.get(response.result, 'pagination', {
+              total: 0,
+              pageSize: 20,
+              current: 1,
+            }),
+          },
+        });
         return;
       }
-      yield put ({
+      yield put({
         type: 'save',
-        payload: { list: [], pagination: { total: 0, pageSize: 20, current: 1 } }
-      })
+        payload: { list: [], pagination: { total: 0, pageSize: 20, current: 1 } },
+      });
     },
     *delete(__, { call, select, put }) {
-      const state: RolesModelState = yield select(states => states.users);
+      const state: RolesModelState = yield select((states) => states.users);
       const { selectedKeys } = state;
       if (_.isArray(selectedKeys) && !_.isEmpty(selectedKeys)) {
         const response = yield call(deleteUsers, selectedKeys);
         if (_.isObject(response) && response.code === 0) {
           yield put({
-            type: 'users/fetch'
-          })
+            type: 'users/fetch',
+          });
         }
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }): UsersModelState {
       if (_.isObject(payload)) {
         return {
           ...state,
-          ...payload
-        }
+          ...payload,
+        };
       }
       return state;
-    }
-  }
-}
+    },
+  },
+};
 
 export default UsersModel;
