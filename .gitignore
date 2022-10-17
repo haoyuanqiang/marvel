@@ -1,10 +1,6 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# -------------------------------------------------------------------------------- #
-# JAVA IGNORE
-# -------------------------------------------------------------------------------- #
-
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -70,47 +66,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 **/target/
+dist/
 
-
-# -------------------------------------------------------------------------------- #
-# Web IGNORE
-# -------------------------------------------------------------------------------- #
-
-# dependencies
-**/node_modules
-# roadhog-api-doc ignore
-/src/utils/request-temp.js
-_roadhog-api-doc
-
-# production
-/dist
-/.vscode
-
-# misc
-.DS_Store
-npm-debug.log*
-yarn-error.log
-
-/coverage
-.idea
-yarn.lock
-package-lock.json
-*bak
-.vscode
-
-# visual studio code
-.history
-*.log
-functions/*
-.temp/**
-
-# umi
-.umi
-.umi-production
-
-# screenshot
-screenshot
-.firebase
-.eslintcache
-
-build
+.idea/jarRepositories.xml

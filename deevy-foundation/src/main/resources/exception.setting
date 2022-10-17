@@ -1,0 +1,31 @@
+# -------------------------------------------------------------- #
+# 异常信息国际化文件
+# 目前仅支持：中文（zh_cn）、English（en_us）
+# -------------------------------------------------------------- #
+[global_config]
+baseCode = 23
+
+[exception_code]
+
+OBJ_NOT_FOUND = ${global_config.baseCode}19
+PARAM_NOT_NULL = ${global_config.baseCode}20
+USER_NOT_FOUND = ${global_config.baseCode}26
+USER_PASSWORD_NOT_CORRECT =
+USERNAME_OR_PASSWORD_NOT_EMPTY =
+
+
+[exception_message:en_us]
+OBJ_NOT_FOUND = 操作对象不存在
+PARAM_NOT_NULL = 请求参数不可为空
+USER_NOT_FOUND = 用户不存在
+USERNAME_OR_PASSWORD_NOT_EMPTY = 用户名或密码不可为空
+USER_PASSWORD_NOT_CORRECT = 用户名或密码不正确
+USER_LOCKED = 用户已被锁定，请联系管理员解锁
+
+[exception_message:zh_cn]
+OBJ_NOT_FOUND = 操作对象不存在
+PARAM_NOT_NULL = 请求参数不可为空
+USER_NOT_FOUND = 用户不存在
+USERNAME_OR_PASSWORD_NOT_EMPTY = 用户名或密码不可为空
+USER_PASSWORD_NOT_CORRECT = 用户名或密码不正确
+USER_LOCKED = 用户已被锁定，请联系管理员解锁

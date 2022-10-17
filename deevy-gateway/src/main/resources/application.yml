@@ -1,0 +1,29 @@
+server:
+  port: 8200  # 端口号
+
+spring:
+  application:
+    name: deevy-gateway
+  cloud:
+    gateway: # 网关路由配置
+      discovery:
+        locator:
+          enabled: true # 默认值为 true，即默认开启从注册中心动态创建路由的功能，利用微服务名进行路由
+          lowerCaseServiceId: true
+      x-forwarded:
+        enabled: true
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8201/eureka/
+
+logging:
+  level:
+    root: INFO
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN

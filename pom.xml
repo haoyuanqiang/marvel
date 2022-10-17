@@ -1,109 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <!--基本信息-->
-  <groupId>org.marvel</groupId>
-  <artifactId>marvel</artifactId>
-  <version>1.0.0</version>
-  <description>
-    一个基于Spring Cloud的基础微服务开发框架，有高效率，低封装的特点，非常适合学习和中小企业直接作为开发框架使用。
-  </description>
-  <packaging>pom</packaging>
+    <groupId>org.marvel.deevy</groupId>
+    <artifactId>marvel-deevy</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <name>marvel-deevy</name>
+    <description>The Marvel Deevy Project</description>
 
-  <modules>
-    <module>marvel-common</module>
-    <module>marvel-discovery</module>
-    <module>marvel-auth</module>
-    <module>marvel-gateway</module>
-    <module>marvel-admin</module>
-  </modules>
+    <modules>
+        <module>deevy-discovery</module>
+        <module>deevy-common</module>
+        <module>deevy-foundation</module>
+        <module>deevy-gateway</module>
+    </modules>
 
-  <!--属性-->
-  <properties>
-    <java.version>1.8</java.version>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
-    <!-- 文件拷贝时的编码 -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- 编译时的编码 -->
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-    <!-- Lombok -->
-    <lombok.version>1.18.18</lombok.version>
-    <!-- 工具包 -->
-    <hutool.version>5.6.3</hutool.version>
-    <fastjson.version>1.2.71</fastjson.version>
-    <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
-    <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-  </properties>
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- 文件拷贝时的编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Spring -->
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <spring-boot.version>2.7.3</spring-boot.version>
+        <!-- Lombok -->
+        <lombok.version>1.18.22</lombok.version>
+        <!-- 工具包 -->
+        <hutool.version>5.8.5</hutool.version>
+        <!-- 数据库 -->
+        <alibaba-durid.version>1.2.8</alibaba-durid.version>
+        <!-- Querydsl -->
+        <querydsl.version>5.0.0</querydsl.version>
+        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
+        <!-- 工作流 -->
+        <flowable.version>6.5.0</flowable.version>
+        <!-- 校验 -->
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <!-- Aviator -->
+        <aviator.version>5.3.1</aviator.version>
+        <mariadb.version>2.6.0</mariadb.version>
+    </properties>
 
-  <!--依赖-->
-  <dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-  </dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-  <!--依赖-->
-  <dependencyManagement>
-    <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+            <!--Lombok-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+            <!-- HuTool -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
 
-      <!--Lombok-->
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
-      </dependency>
-      <!-- HuTool -->
-      <dependency>
-        <groupId>cn.hutool</groupId>
-        <artifactId>hutool-all</artifactId>
-        <version>${hutool.version}</version>
-      </dependency>
-      <!-- fastjson -->
-      <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>fastjson</artifactId>
-        <version>${fastjson.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${alibaba-durid.version}</version>
+            </dependency>
 
-    </dependencies>
-  </dependencyManagement>
+            <!-- Querydsl -->
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-core</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
 
-  <!--构建-->
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring-boot.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>repackage</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.googlecode.aviator</groupId>
+                <artifactId>aviator</artifactId>
+                <version>${aviator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${mariadb.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax-validation.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>central</id>-->
+    <!--            <name>maven-central</name>-->
+    <!--            <url>https://maven.aliyun.com/repository/public</url>-->
+    <!--            <layout>default</layout>-->
+    <!--            <releases>-->
+    <!--                <enabled>false</enabled>-->
+    <!--            </releases>-->
+    <!--            <snapshots>-->
+    <!--                <enabled>false</enabled>-->
+    <!--            </snapshots>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
 </project>

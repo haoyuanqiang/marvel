@@ -1,0 +1,82 @@
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8201/eureka/
+
+info:
+  name: deevy-foundation
+  organization: org.marvel.deevy
+  build:
+    artifactId: $project.artifactId$
+    version: $project.version$
+
+server:
+  port: 8202
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+
+spring:
+  application:
+    name: deevy-foundation
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:mariadb://localhost:3306/marvel-deevy?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: Yanfa_1304
+    driver-class-name: org.mariadb.jdbc.Driver
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开 PSCache，并且指定每个连接上 PSCache 的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的 filters，去掉后监控界面 sql 无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 通过 connectProperties 属性来打开 mergeSql 功能；慢 SQL 记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个 DruidDataSource 的监控数据
+      useGlobalDataSourceStat: true
+
+  jpa:
+    open-in-view: true
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+        hbm2ddl:
+          auto: update
+
+logging:
+  level:
+    root: INFO
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
